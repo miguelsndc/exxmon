@@ -4,7 +4,7 @@ import { generateUniqueId } from '../../../utils/uuid'
 
 import { MovieCard } from '../../../components/MovieCard'
 
-import { GridContainer } from './styles'
+import { GridContainer } from '../../../styles/pages/Popular'
 import { MovieResponse } from '../../../types/Movie'
 import { api } from '../../../services/api'
 import { GetStaticProps } from 'next'

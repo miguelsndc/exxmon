@@ -10,7 +10,13 @@ import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 import { Loading } from '../../components/Loading'
 import { HorizontalScrollSection } from '../../components/HorizontalScroll'
 
-import { MoviePoster, Overlay, MovieInfo, Poster, Details } from './styles'
+import {
+  MoviePoster,
+  Overlay,
+  MovieInfo,
+  Poster,
+  Details,
+} from '../../styles/pages/Id'
 
 import { Card } from '../../components/Card'
 
