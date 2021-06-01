@@ -4,7 +4,6 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 
 import { useRouter } from 'next/router'
 
-import { useState } from 'react'
 import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 
 import { Loading } from '../../components/Loading'
@@ -23,6 +22,12 @@ import { Card } from '../../components/Card'
 import Link from 'next/link'
 import { api } from '../../services/api'
 
+interface SimilarMovie {
+  id: string
+  posterPath: string
+  title: string
+  rating: number
+}
 interface MovieDetailsProps {
   releaseDate: string
   backdropPath: string
@@ -36,15 +41,18 @@ interface MovieDetailsProps {
 
 interface Params {
   movieDetails: MovieDetailsProps
+  similarMovies: SimilarMovie[]
 }
 
-export default function CMovieDetails({ movieDetails }: Params) {
+export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
   const router = useRouter()
 
-  console.log(movieDetails)
-
   if (router.isFallback) {
-    return <Loading />
+    return (
+      <Container>
+        <Loading />
+      </Container>
+    )
   }
 
   function formatDate(date?: string) {
@@ -80,9 +88,9 @@ export default function CMovieDetails({ movieDetails }: Params) {
                 </div>
                 <div>
                   <h3>Genres: </h3>
-                  {/* {movieDetails?.genres.map((genre, index) => {
+                  {movieDetails?.genres.map((genre, index) => {
                     return <span key={index}>{genre.name},</span>
-                  })} */}
+                  })}
                 </div>
                 <div>
                   <h3>Release date: </h3>
@@ -96,53 +104,65 @@ export default function CMovieDetails({ movieDetails }: Params) {
             </Details>
           </MovieInfo>
         </MoviePoster>
-        {/* <HorizontalScrollSection title="Similar Movies">
-          {similarMovies?.results.map((movie) => {
+        <HorizontalScrollSection title="Similar Movies">
+          {similarMovies?.map((movie) => {
+            console.log(movie.id)
             return (
-              <Link href={`/movies/${movie.id}`} key={movie.id}>
+              <div
+                key={movie.id}
+                onClick={() => router.push(`/movies/${movie.id}`)}
+              >
                 <Card
-                  name={movie.title || movie.original_title}
-                  popularity={movie.vote_average}
-                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                  name={movie.title}
+                  popularity={movie.rating}
+                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
                 />
-              </Link>
+              </div>
             )
           })}
-        </HorizontalScrollSection> */}
+        </HorizontalScrollSection>
       </section>
     </Container>
   )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { data } = await api.get<MovieResponse>('/movie/popular')
-
-  const paths = data.results.map((movie) => ({
-    params: { id: String(movie.id) },
-  }))
-
   return {
-    paths,
+    paths: [],
     fallback: true,
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params
-  const { data } = await api.get<MovieDetails>(`/movie/${id}`)
+  const movieDetailsResponse = await api.get<MovieDetails>(`/movie/${id}`)
+  const similarMoviesResponse = await api.get<MovieResponse>(
+    `/movie/${id}/similar`
+  )
 
   const movieDetails = {
-    releaseDate: data.release_date,
-    backdropPath: data.backdrop_path,
-    posterPath: data.poster_path,
-    title: data.title || data.original_title,
-    overview: data.overview,
-    rating: data.vote_average,
-    genres: data.genres,
-    status: data.status,
+    releaseDate: movieDetailsResponse.data.release_date,
+    backdropPath: movieDetailsResponse.data.backdrop_path,
+    posterPath: movieDetailsResponse.data.poster_path,
+    title:
+      movieDetailsResponse.data.title ||
+      movieDetailsResponse.data.original_title,
+    overview: movieDetailsResponse.data.overview,
+    rating: movieDetailsResponse.data.vote_average,
+    genres: movieDetailsResponse.data.genres,
+    status: movieDetailsResponse.data.status,
   }
 
+  const similarMovies = similarMoviesResponse.data.results.map((movie) => {
+    return {
+      id: movie.id,
+      posterPath: movie.poster_path,
+      title: movie.title || movie.original_title,
+      rating: movie.vote_average,
+    }
+  })
+
   return {
-    props: { movieDetails },
+    props: { movieDetails, similarMovies },
   }
 }
