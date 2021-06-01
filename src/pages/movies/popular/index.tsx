@@ -8,6 +8,7 @@ import { GridContainer } from '../../../styles/pages/Popular'
 import { MovieResponse } from '../../../types/Movie'
 import { api } from '../../../services/api'
 import { GetStaticProps } from 'next'
+import { useEffect, useRef, useState } from 'react'
 
 interface PopularMovie {
   id: number
@@ -23,11 +24,51 @@ interface PopularMoviesProps {
 export default function PopularMovies({
   mostPopularMovies,
 }: PopularMoviesProps) {
+  const [currentContent, setCurrentContent] = useState(mostPopularMovies)
+  const [isInitialContent, setIsInitialContent] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(2)
+
+  function next(currentPage: number) {
+    setIsLoading(true)
+    api
+      .get<MovieResponse>('/movie/popular', {
+        params: {
+          page: currentPage,
+        },
+      })
+      .then(({ data }) => {
+        const newContent = data.results.map((movie) => {
+          return {
+            id: movie.id,
+            posterPath: movie.poster_path,
+            title: movie.title || movie.original_title,
+            rating: movie.vote_average,
+          }
+        })
+
+        setCurrentContent((prevContent) => {
+          return [...prevContent, ...newContent]
+        })
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+
+  function loadMore() {
+    setPage((prevPage) => prevPage + 1)
+  }
+
+  useEffect(() => {
+    isInitialContent ? setIsInitialContent(false) : next(page)
+  }, [page])
+
   return (
     <Container>
       <h1>Most Popular</h1>
       <GridContainer>
-        {mostPopularMovies?.map((movie) => {
+        {currentContent?.map((movie) => {
           return (
             <MovieCard
               key={generateUniqueId()}
@@ -39,6 +80,8 @@ export default function PopularMovies({
           )
         })}
       </GridContainer>
+      {isLoading && <h1>Loading...</h1>}
+      <button onClick={loadMore}>load more</button>
     </Container>
   )
 }
