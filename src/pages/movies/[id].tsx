@@ -48,6 +48,7 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
   const router = useRouter()
 
   if (router.isFallback) {
+    console.log('fallback')
     return (
       <Container>
         <Loading />
@@ -106,18 +107,14 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
         </MoviePoster>
         <HorizontalScrollSection title="Similar Movies">
           {similarMovies?.map((movie) => {
-            console.log(movie.id)
             return (
-              <div
+              <Card
                 key={movie.id}
                 onClick={() => router.push(`/movies/${movie.id}`)}
-              >
-                <Card
-                  name={movie.title}
-                  popularity={movie.rating}
-                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
-                />
-              </div>
+                name={movie.title}
+                popularity={movie.rating}
+                backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+              />
             )
           })}
         </HorizontalScrollSection>
@@ -127,8 +124,18 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data } = await api.get<MovieResponse>('/movie/popular')
+
+  const paths = data.results.map((movie) => {
+    return {
+      params: {
+        id: String(movie.id),
+      },
+    }
+  })
+
   return {
-    paths: [],
+    paths,
     fallback: true,
   }
 }
