@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
       <main style={{ display: 'flex' }}>
         <LeftSidebar />
         <Component {...pageProps} />
-        <RightSidebar />
+        {/* <RightSidebar /> */}
       </main>
     </ThemeProvider>
   )
