@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle } from 'styled-components'
 
 export const Container = styled.div`
-  width: 68vw;
+  width: 100%;
   padding: 2rem 4rem;
   height: 100vh;
   border-right: 1px solid ${(props) => props.theme.gray400};
