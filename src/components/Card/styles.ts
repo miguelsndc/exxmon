@@ -18,12 +18,12 @@ export const Wrapper = styled.div<WrapperProps>`
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  cursor: pointer;
-  &:hover {
-    & div:first-child {
-      opacity: 0.15;
-    }
+
+  img {
+    border-radius: 20px;
   }
+
+  cursor: pointer;
 `
 
 export const Overlay = styled.div`
