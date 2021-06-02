@@ -27,8 +27,7 @@ function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
         <Image
           loader={myLoader}
           src={`https://image.tmdb.org/t/p/w500${posterPath}`}
-          width={260}
-          height={320}
+          layout="fill"
         />
         <MovieInfo>
           <span>{title}</span>

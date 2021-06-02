@@ -5,6 +5,9 @@ export const Card = styled.article`
   text-align: center;
   border-radius: 20px;
 
+  width: 85%;
+  height: 20rem;
+
   cursor: pointer;
 
   img {
@@ -25,6 +28,7 @@ export const Card = styled.article`
 
 export const MovieInfo = styled.div`
   display: flex;
+  width: 90%;
   flex-direction: column;
   position: absolute;
 
