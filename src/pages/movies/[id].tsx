@@ -6,6 +6,46 @@ import { useRouter } from 'next/router'
 
 import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 
+{
+  /* <MoviePoster
+          backdropPath={`https://image.tmdb.org/t/p/original/${movieDetails?.backdropPath}`}
+        >
+          <Overlay />
+          <MovieInfo>
+            <Poster
+              src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
+              alt={movieDetails?.title}
+            />
+            <Details>
+              <h2>{movieDetails?.title || movieDetails?.title}</h2>
+              <p>{movieDetails?.overview}</p>
+              <div>
+                <div>
+                  <img src="/assets/images/imdb.svg" alt="IMDB" />
+                  <h2>{movieDetails?.rating}</h2>
+                </div>
+                <div>
+                  <h3>Genres: </h3>
+                  {movieDetails?.genres.map((genre, index) => {
+                    return <span key={index}>{genre.name},</span>
+                  })}
+                </div>
+                <div>
+                  <h3>Release date: </h3>
+                  <span>{formatedDate}</span>
+                </div>
+                <div>
+                  <h3>Status: </h3>
+                  <span>{movieDetails?.status}</span>
+                </div>
+              </div>
+            </Details>
+          </MovieInfo>
+        </MoviePoster> */
+}
+
+import Image from 'next/image'
+
 import { Loading } from '../../components/Loading'
 import { HorizontalScrollSection } from '../../components/HorizontalScroll'
 
@@ -67,18 +107,35 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
 
   const formatedDate = formatDate(movieDetails?.releaseDate)
 
+  const backgroundLoader = ({ src }) => {
+    return `https://image.tmdb.org/t/p/original${src}`
+  }
+
+  const posterLoader = ({ src }) => {
+    return `https://image.tmdb.org/t/p/w500${src}`
+  }
+
   return (
     <Container>
       <section>
-        <MoviePoster
-          backdropPath={`https://image.tmdb.org/t/p/original/${movieDetails?.backdropPath}`}
-        >
-          <Overlay />
+        <MoviePoster>
+          <Image
+            loader={backgroundLoader}
+            src={`https://image.tmdb.org/t/p/original/${movieDetails?.backdropPath}`}
+            layout="fill"
+            objectFit="cover"
+          />
           <MovieInfo>
-            <Poster
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
-              alt={movieDetails?.title}
-            />
+            <div style={{ width: '200px', height: '300px' }}>
+              <Image
+                loader={posterLoader}
+                src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
+                width={200}
+                height={300}
+                layout="fixed"
+              />
+            </div>
+
             <Details>
               <h2>{movieDetails?.title || movieDetails?.title}</h2>
               <p>{movieDetails?.overview}</p>
@@ -105,6 +162,7 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
             </Details>
           </MovieInfo>
         </MoviePoster>
+
         <HorizontalScrollSection title="Similar Movies">
           {similarMovies?.map((movie) => {
             return (
