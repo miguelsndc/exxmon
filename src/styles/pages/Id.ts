@@ -1,23 +1,30 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const Fade = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity:1 
+  }
+`
 
 interface SimilarMovieProps {
   posterPath: string
 }
 
-interface MoviePosterProps {
-  backdropPath: string
-}
-
-export const MoviePoster = styled.div<MoviePosterProps>`
+export const MoviePoster = styled.div`
   position: relative;
-  background-image: url(${(props) => props.backdropPath});
-  background-size: cover;
   padding: 2.45rem;
   border-radius: 20px;
   min-width: 90%;
   height: 38rem;
   display: flex;
   align-items: flex-end;
+  animation: ${Fade} 1s;
+
+  img {
+    border-radius: 20px;
+  }
 `
 
 export const Overlay = styled.div`
