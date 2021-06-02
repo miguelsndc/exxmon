@@ -61,3 +61,8 @@ export const GlobalStyles = createGlobalStyle`
       text-decoration: none;
     }
 `
+
+export const FlexCenterX = styled.div`
+  display: flex;
+  justify-content: center;
+`
