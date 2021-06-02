@@ -1,6 +1,11 @@
 import styled from 'styled-components'
 
-export const Card = styled.article`
+interface MovieCardProps {
+  hasPoster: boolean
+}
+
+export const Card = styled.article<MovieCardProps>`
+  background: ${(props) => !props.hasPoster && '#000'};
   position: relative;
   text-align: center;
   border-radius: 20px;
@@ -9,6 +14,14 @@ export const Card = styled.article`
   height: 20rem;
 
   cursor: pointer;
+
+  strong {
+    position: absolute;
+    color: #ebebeb;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   img {
     border-radius: 20px;
