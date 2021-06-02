@@ -1,12 +1,10 @@
 import styled from 'styled-components'
 
 export const Card = styled.article`
-  transition: box-shadow 0.2s;
   position: relative;
   text-align: center;
   border-radius: 20px;
-  width: 250px;
-  height: 320px;
+
   cursor: pointer;
 
   img {
@@ -22,7 +20,6 @@ export const Card = styled.article`
     {
       opacity: 0.2;
     }
-    box-shadow: 0px 0px 1px 4px #ebebeb;
   }
 `
 
@@ -31,7 +28,7 @@ export const MovieInfo = styled.div`
   flex-direction: column;
   position: absolute;
 
-  top: 50%;
+  top: 85%;
   left: 50%;
   transform: translate(-50%, -50%);
 

@@ -15,8 +15,7 @@ interface MovieCardProps {
 
       > */
 }
-
-export function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
+function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
   const myLoader = ({ src }) => {
     return `https://image.tmdb.org/t/p/w500${src}`
   }
@@ -28,8 +27,8 @@ export function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
         <Image
           loader={myLoader}
           src={`https://image.tmdb.org/t/p/w500${posterPath}`}
-          width={520}
-          height={640}
+          width={260}
+          height={320}
         />
         <MovieInfo>
           <span>{title}</span>
@@ -42,3 +41,5 @@ export function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
     </Link>
   )
 }
+
+export default MovieCard
