@@ -12,6 +12,8 @@ import {
 
 import { Genre } from '../../types/Movie'
 
+import Link from 'next/link'
+
 interface IFeaturedMovieProps {
   backdropPath?: string
   originalTitle?: string
@@ -36,7 +38,9 @@ export function FeaturedMovie({
           })}
         </Genres>
         <ButtonWrapper>
-          <CtaButton>Watch</CtaButton>
+          <Link href="/movies/299536">
+            <CtaButton>Know More</CtaButton>
+          </Link>
           <AddToFavoritesButton>
             <RiAddFill size="2rem" />
           </AddToFavoritesButton>
