@@ -9,6 +9,8 @@ import {
   RiTimerFlashLine,
 } from 'react-icons/ri'
 
+import { BiTrendingUp } from 'react-icons/bi'
+
 export function LeftSidebar() {
   return (
     <Wrapper>
@@ -24,6 +26,12 @@ export function LeftSidebar() {
           <MenuOption>
             <RiHomeFill color={'#5c5d63'} size="1.5rem" />
             <span>Home</span>
+          </MenuOption>
+        </Link>
+        <Link href="/movies/popular">
+          <MenuOption>
+            <BiTrendingUp color={'#5c5d63'} size="1.5rem" />
+            <span>Popular</span>
           </MenuOption>
         </Link>
         <MenuOption>
