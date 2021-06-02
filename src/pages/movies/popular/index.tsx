@@ -1,17 +1,19 @@
-import { Container } from '../../../styles/globals'
+import { useEffect, useRef, useState } from 'react'
+import { GetStaticProps } from 'next'
+import { Container, FlexCenterX } from '../../../styles/globals'
 
 import MovieCard from '../../../components/MovieCard'
+import { Loading } from '../../../components/Loading'
+
+import { MovieResponse } from '../../../types/Movie'
 
 import {
   GridContainer,
   MostPopularSection,
 } from '../../../styles/pages/Popular'
-import { MovieResponse } from '../../../types/Movie'
 import { api } from '../../../services/api'
-import { GetStaticProps } from 'next'
-import { useEffect, useState } from 'react'
 import { usePagination } from '../../../hooks/usePagination'
-import { CtaButton } from '../../../styles/pages/Popular'
+import { useElementOnScreen } from '../../../hooks/useElementOnScreen'
 
 interface PopularMovie {
   id: number
@@ -29,24 +31,29 @@ export default function PopularMovies({
 }: PopularMoviesProps) {
   const [page, setPage] = useState(2)
 
+  const containerRef = useRef<HTMLElement | null>(null)
+
+  const { elementRef, isVisible } = useElementOnScreen({
+    root: containerRef.current,
+    rootMargin: '0px',
+    threshold: 0.7,
+  })
+
   const { currentContent, next, isLoading, error } = usePagination(
     page,
     mostPopularMovies
   )
 
-  function loadMore() {
-    setPage((prevPage) => prevPage + 1)
-  }
-
   useEffect(() => {
-    if (!error) {
+    if (!error && isVisible) {
       next(page)
+      setPage((prevPage) => prevPage + 1)
     }
-  }, [page])
+  }, [isVisible])
 
   return (
     <Container>
-      <MostPopularSection>
+      <MostPopularSection ref={containerRef}>
         <h1>Most Popular</h1>
         <GridContainer>
           {currentContent?.map((movie) => {
@@ -61,9 +68,13 @@ export default function PopularMovies({
             )
           })}
         </GridContainer>
-        {isLoading && <h1>Loading...</h1>}
+        {isLoading && (
+          <FlexCenterX>
+            <Loading />
+          </FlexCenterX>
+        )}
         {error && <h1>{error}</h1>}
-        {error || <CtaButton onClick={loadMore}>load more</CtaButton>}
+        <div ref={elementRef}></div>
       </MostPopularSection>
     </Container>
   )
