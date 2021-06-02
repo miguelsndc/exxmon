@@ -1,27 +1,22 @@
 import styled from 'styled-components'
 
-interface CardProps {
-  posterPath: string
-}
-
-export const Card = styled.article<CardProps>`
-  background-image: ${(props) => `url(${props.posterPath})`};
-  background-size: cover;
-  background-position-x: center;
-  background-repeat: no-repeat;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  border-radius: 20px;
-  width: 80%;
-  height: 20rem;
-  text-align: center;
-  cursor: pointer;
+export const Card = styled.article`
   transition: box-shadow 0.2s;
+  position: relative;
+  text-align: center;
+  border-radius: 20px;
+  width: 250px;
+  height: 320px;
+  cursor: pointer;
+
+  img {
+    border-radius: 20px;
+  }
+
   span {
     font-weight: 500;
   }
+
   &:hover {
     & > div:first-child //overlay
     {
@@ -34,6 +29,12 @@ export const Card = styled.article<CardProps>`
 export const MovieInfo = styled.div`
   display: flex;
   flex-direction: column;
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   z-index: 9;
   span {
     font-weight: 500;
