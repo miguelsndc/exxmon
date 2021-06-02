@@ -41,7 +41,7 @@ export default function Feed({ featuredMovie, mostPopularArtists }: FeedProps) {
             <Card
               key={artist.id}
               name={artist.name}
-              backdropPath={artist.profilePath}
+              backdropPath={`https://image.tmdb.org/t/p/w500${artist.profilePath}`}
               popularity={artist.popularity}
             />
           )
