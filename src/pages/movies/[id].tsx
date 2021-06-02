@@ -6,60 +6,15 @@ import { useRouter } from 'next/router'
 
 import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 
-{
-  /* <MoviePoster
-          backdropPath={`https://image.tmdb.org/t/p/original/${movieDetails?.backdropPath}`}
-        >
-          <Overlay />
-          <MovieInfo>
-            <Poster
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
-              alt={movieDetails?.title}
-            />
-            <Details>
-              <h2>{movieDetails?.title || movieDetails?.title}</h2>
-              <p>{movieDetails?.overview}</p>
-              <div>
-                <div>
-                  <img src="/assets/images/imdb.svg" alt="IMDB" />
-                  <h2>{movieDetails?.rating}</h2>
-                </div>
-                <div>
-                  <h3>Genres: </h3>
-                  {movieDetails?.genres.map((genre, index) => {
-                    return <span key={index}>{genre.name},</span>
-                  })}
-                </div>
-                <div>
-                  <h3>Release date: </h3>
-                  <span>{formatedDate}</span>
-                </div>
-                <div>
-                  <h3>Status: </h3>
-                  <span>{movieDetails?.status}</span>
-                </div>
-              </div>
-            </Details>
-          </MovieInfo>
-        </MoviePoster> */
-}
-
 import Image from 'next/image'
 
 import { Loading } from '../../components/Loading'
 import { HorizontalScrollSection } from '../../components/HorizontalScroll'
 
-import {
-  MoviePoster,
-  Overlay,
-  MovieInfo,
-  Poster,
-  Details,
-} from '../../styles/pages/Id'
+import { MoviePoster, Overlay, MovieInfo, Details } from '../../styles/pages/Id'
 
 import { Card } from '../../components/Card'
 
-import Link from 'next/link'
 import { api } from '../../services/api'
 
 interface SimilarMovie {
