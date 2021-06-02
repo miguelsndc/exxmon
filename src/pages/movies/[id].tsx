@@ -121,10 +121,11 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
         <MoviePoster>
           <Image
             loader={backgroundLoader}
-            src={`https://image.tmdb.org/t/p/original/${movieDetails?.backdropPath}`}
+            src={`https://image.tmdb.org/t/p/w500/${movieDetails?.backdropPath}`}
             layout="fill"
             objectFit="cover"
           />
+          <Overlay />
           <MovieInfo>
             <div style={{ width: '200px', height: '300px' }}>
               <Image
