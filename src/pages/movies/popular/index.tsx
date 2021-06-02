@@ -1,14 +1,12 @@
 import { Container } from '../../../styles/globals'
 
-import { generateUniqueId } from '../../../utils/uuid'
-
-import { MovieCard } from '../../../components/MovieCard'
+import MovieCard from '../../../components/MovieCard'
 
 import { GridContainer } from '../../../styles/pages/Popular'
 import { MovieResponse } from '../../../types/Movie'
 import { api } from '../../../services/api'
 import { GetStaticProps } from 'next'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface PopularMovie {
   id: number
@@ -25,7 +23,6 @@ export default function PopularMovies({
   mostPopularMovies,
 }: PopularMoviesProps) {
   const [currentContent, setCurrentContent] = useState(mostPopularMovies)
-  const [isInitialContent, setIsInitialContent] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [page, setPage] = useState(2)
 
@@ -61,7 +58,7 @@ export default function PopularMovies({
   }
 
   useEffect(() => {
-    isInitialContent ? setIsInitialContent(false) : next(page)
+    next(page)
   }, [page])
 
   return (
@@ -71,7 +68,7 @@ export default function PopularMovies({
         {currentContent?.map((movie) => {
           return (
             <MovieCard
-              key={generateUniqueId()}
+              key={movie.id}
               id={movie.id}
               posterPath={movie.posterPath}
               title={movie.title || movie.title}
