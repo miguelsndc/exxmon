@@ -15,11 +15,9 @@ export function Card({ name, popularity, backdropPath, ...rest }: CardProps) {
     return `${src}`
   }
 
-  console.log(backdropPath)
-
   return (
     <div {...rest}>
-      <Wrapper>
+      <Wrapper hasPoster={!!backdropPath}>
         <Image loader={myLoader} layout="fill" src={`${backdropPath}`} />
         <Overlay />
         <Details>
