@@ -96,3 +96,10 @@ export const SimilarMovie = styled.div<SimilarMovieProps>`
   min-width: 13rem;
   height: 16rem;
 `
+
+export const NoResultsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2rem;
+`
