@@ -1,21 +1,26 @@
-import { Container } from '../../styles/globals'
-
 import { GetStaticPaths, GetStaticProps } from 'next'
-
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import Link from 'next/link'
+
+import { HorizontalScrollSection } from '../../components/HorizontalScroll'
+import { Loading } from '../../components/Loading'
+import { Card } from '../../components/Card'
 
 import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 
-import Image from 'next/image'
-
-import { Loading } from '../../components/Loading'
-import { HorizontalScrollSection } from '../../components/HorizontalScroll'
-
-import { MoviePoster, Overlay, MovieInfo, Details } from '../../styles/pages/Id'
-
-import { Card } from '../../components/Card'
-
 import { api } from '../../services/api'
+
+import { CtaButton } from '../../styles/pages/Popular'
+import { Container } from '../../styles/globals'
+import {
+  MoviePoster,
+  Overlay,
+  MovieInfo,
+  Details,
+  NoResultsContainer,
+} from '../../styles/pages/Id'
+import { useRef } from 'react'
 
 interface SimilarMovie {
   id: string
@@ -119,19 +124,28 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
           </MovieInfo>
         </MoviePoster>
 
-        <HorizontalScrollSection title="Similar Movies">
-          {similarMovies?.map((movie) => {
-            return (
-              <Card
-                key={movie.id}
-                onClick={() => router.push(`/movies/${movie.id}`)}
-                name={movie.title}
-                popularity={movie.rating}
-                backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
-              />
-            )
-          })}
-        </HorizontalScrollSection>
+        {similarMovies.length ? (
+          <HorizontalScrollSection title="Similar Movies">
+            {similarMovies?.map((movie) => {
+              return (
+                <Card
+                  key={movie.id}
+                  onClick={() => router.push(`/movies/${movie.id}`)}
+                  name={movie.title}
+                  popularity={movie.rating}
+                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+                />
+              )
+            })}
+          </HorizontalScrollSection>
+        ) : (
+          <NoResultsContainer>
+            Could not find any similar movies of: "{movieDetails.title}"
+            <Link href="/movies/popular">
+              <CtaButton>Go back to Popular</CtaButton>
+            </Link>
+          </NoResultsContainer>
+        )}
       </section>
     </Container>
   )
