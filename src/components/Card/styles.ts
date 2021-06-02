@@ -1,14 +1,11 @@
 import styled from 'styled-components'
 
 interface WrapperProps {
-  backdropPath?: string
+  hasPoster: boolean
 }
 
 export const Wrapper = styled.div<WrapperProps>`
-  background-image: ${(props) => `url(${props.backdropPath})`};
-  background-size: cover;
-  background-position-x: center;
-  background-repeat: no-repeat;
+  background: ${(props) => props.hasPoster && 'black'};
   border-radius: 20px;
   position: relative;
   padding: 1rem;

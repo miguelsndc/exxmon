@@ -22,13 +22,17 @@ function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
 
   return (
     <Link href={`/movies/${id}`}>
-      <Card>
+      <Card hasPoster={!!posterPath}>
         <Overlay />
-        <Image
-          loader={myLoader}
-          src={`https://image.tmdb.org/t/p/w500${posterPath}`}
-          layout="fill"
-        />
+        {posterPath ? (
+          <Image
+            loader={myLoader}
+            src={`https://image.tmdb.org/t/p/w500${posterPath}`}
+            layout="fill"
+          />
+        ) : (
+          <strong>Poster not available.</strong>
+        )}
         <MovieInfo>
           <span>{title}</span>
           <div>
