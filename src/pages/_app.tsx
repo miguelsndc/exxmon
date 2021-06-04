@@ -1,24 +1,33 @@
+import Head from 'next/head'
+
 import { ThemeProvider } from 'styled-components'
 
 import { GlobalStyles } from '../styles/globals'
+import { Container } from '../styles/globals'
 
-import { LeftSidebar } from '../components/LeftSidebar'
+import { Menu } from '../components/Menu'
 
 import { DarkTheme } from '../styles/themes/dark'
 import { MovieProvider } from '../contexts/MovieContext'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <MovieProvider>
-      <ThemeProvider theme={DarkTheme}>
-        <GlobalStyles />
-        <main style={{ display: 'flex' }}>
-          <LeftSidebar />
-          <Component {...pageProps} />
-          {/* <RightSidebar /> */}
-        </main>
-      </ThemeProvider>
-    </MovieProvider>
+    <>
+      <Head>
+        <title>Exxmon</title>
+      </Head>
+      <MovieProvider>
+        <ThemeProvider theme={DarkTheme}>
+          <GlobalStyles />
+          <main style={{ display: 'flex' }}>
+            <Menu />
+            <Container>
+              <Component {...pageProps} />
+            </Container>
+          </main>
+        </ThemeProvider>
+      </MovieProvider>
+    </>
   )
 }
 
