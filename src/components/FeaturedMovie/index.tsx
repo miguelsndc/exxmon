@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { RiAddFill } from 'react-icons/ri'
 
 import {
@@ -11,8 +13,6 @@ import {
 } from './styles'
 
 import { Genre } from '../../types/Movie'
-
-import Link from 'next/link'
 
 interface IFeaturedMovieProps {
   backdropPath?: string
