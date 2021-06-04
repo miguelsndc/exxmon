@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
 import { GetStaticProps } from 'next'
+import { useEffect, useRef, useState } from 'react'
 import { Container, FlexCenterX } from '../../../styles/globals'
 
-import MovieCard from '../../../components/MovieCard'
+import { MovieCard } from '../../../components/MovieCard'
 import { Loading } from '../../../components/Loading'
 
 import { MovieResponse } from '../../../types/Movie'
@@ -36,27 +36,38 @@ export default function PopularMovies({
   const { elementRef, isVisible } = useElementOnScreen({
     root: containerRef.current,
     rootMargin: '0px',
-    threshold: 0.7,
+    threshold: 0.3,
   })
 
-  const { currentContent, next, isLoading, error } = usePagination(
+  const { currentContent, next, isLoading, hasMore } = usePagination(
     page,
     mostPopularMovies
   )
 
   useEffect(() => {
-    if (!error && isVisible) {
+    if (hasMore && isVisible) {
       next(page)
       setPage((prevPage) => prevPage + 1)
     }
   }, [isVisible])
 
   return (
-    <Container>
-      <MostPopularSection ref={containerRef}>
-        <h1>Most Popular</h1>
-        <GridContainer>
-          {currentContent?.map((movie) => {
+    <MostPopularSection ref={containerRef}>
+      <h1>Most Popular</h1>
+      <GridContainer>
+        {currentContent?.map((movie, index) => {
+          if (index === currentContent.length - 1) {
+            return (
+              <div ref={elementRef} key={movie.id}>
+                <MovieCard
+                  id={movie.id}
+                  posterPath={movie.posterPath}
+                  title={movie.title || movie.title}
+                  rating={movie.rating}
+                />
+              </div>
+            )
+          } else {
             return (
               <MovieCard
                 key={movie.id}
@@ -66,17 +77,12 @@ export default function PopularMovies({
                 rating={movie.rating}
               />
             )
-          })}
-        </GridContainer>
-        {isLoading && (
-          <FlexCenterX>
-            <Loading />
-          </FlexCenterX>
-        )}
-        {error && <h1>{error}</h1>}
-        <div ref={elementRef}></div>
-      </MostPopularSection>
-    </Container>
+          }
+        })}
+      </GridContainer>
+      {isLoading && <Loading />}
+      {!hasMore && <h1>No more content available</h1>}
+    </MostPopularSection>
   )
 }
 
