@@ -63,29 +63,6 @@ export const Details = styled.div`
     font-weight: 500;
     margin-top: 1rem;
   }
-  div {
-    div {
-      display: flex;
-      align-items: center;
-      h3 {
-        font-weight: 500;
-        margin-right: 0.5rem;
-      }
-      span {
-        font-weight: 500;
-        margin-right: 0.45rem;
-        color: #c9c9c9;
-      }
-      &:nth-child(3) {
-        margin: 1rem 0;
-      }
-    }
-    img {
-      width: 4rem;
-      height: 4rem;
-      margin-right: 1rem;
-    }
-  }
 `
 
 export const SimilarMovie = styled.div<SimilarMovieProps>`
@@ -97,9 +74,34 @@ export const SimilarMovie = styled.div<SimilarMovieProps>`
   height: 16rem;
 `
 
-export const NoResultsContainer = styled.div`
+export const ResultsNotFound = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   margin-top: 2rem;
+`
+export const AdditionalInfo = styled.div`
+  display: flex;
+  align-items: center;
+
+  h3 {
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  span {
+    font-weight: 500;
+    margin-right: 0.45rem;
+    color: #c9c9c9;
+  }
+
+  &:nth-child(3) {
+    margin: 1rem 0;
+  }
+
+  img {
+    width: 4rem;
+    height: 4rem;
+    margin-right: 1rem;
+  }
 `
