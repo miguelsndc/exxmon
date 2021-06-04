@@ -17,7 +17,7 @@ export const Wrapper = styled.div<WrapperProps>`
   justify-content: center;
 
   img {
-    border-radius: 20px;
+    border-radius: 10px;
   }
 
   cursor: pointer;
@@ -29,7 +29,7 @@ export const Overlay = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  border-radius: 20px;
+  border-radius: 10px;
   background: ${(props) => props.theme.background};
   opacity: 0.45;
   transition: opacity 0.2s;

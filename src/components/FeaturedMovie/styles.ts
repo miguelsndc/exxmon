@@ -38,7 +38,7 @@ export const Genres = styled.div`
 
 export const Overlay = styled.div`
   position: absolute;
-  border-radius: 40px;
+  border-radius: 10px;
   background: ${(props) => props.theme.background};
   opacity: 0.45;
   top: 0;

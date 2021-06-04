@@ -34,10 +34,12 @@ export function Menu() {
             <span>Popular</span>
           </MenuItem>
         </Link>
-        <MenuItem>
-          <RiCompass4Fill color={'#5c5d63'} size="1.5rem" />
-          <span>Discovery</span>
-        </MenuItem>
+        <Link href="/movies/discover">
+          <MenuItem>
+            <RiCompass4Fill color={'#5c5d63'} size="1.5rem" />
+            <span>Discovery</span>
+          </MenuItem>
+        </Link>
         <MenuItem>
           <RiTimerFlashLine color={'#5c5d63'} size="1.5rem" />
           <span>Coming Soon</span>

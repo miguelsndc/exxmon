@@ -15,7 +15,7 @@ interface SimilarMovieProps {
 export const MoviePoster = styled.div`
   position: relative;
   padding: 2.45rem;
-  border-radius: 20px;
+  border-radius: 10px;
   min-width: 90%;
   height: 38rem;
   display: flex;
@@ -23,7 +23,7 @@ export const MoviePoster = styled.div`
   animation: ${Fade} 1s;
 
   img {
-    border-radius: 20px;
+    border-radius: 10px;
   }
 `
 
@@ -33,7 +33,7 @@ export const Overlay = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  border-radius: 20px;
+  border-radius: 10px;
   background: ${(props) => props.theme.background};
   opacity: 0.5;
 `
@@ -68,7 +68,7 @@ export const Details = styled.div`
 export const SimilarMovie = styled.div<SimilarMovieProps>`
   background-image: ${(props) => `url(${props.posterPath})`};
   background-size: cover;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 1rem;
   min-width: 13rem;
   height: 16rem;

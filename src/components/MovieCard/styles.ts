@@ -8,10 +8,10 @@ export const Card = styled.article<MovieCardProps>`
   background: ${(props) => !props.hasPoster && '#000'};
   position: relative;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 10px;
 
-  width: 85%;
-  height: 20rem;
+  width: 75%;
+  height: 18rem;
 
   cursor: pointer;
 
@@ -24,7 +24,7 @@ export const Card = styled.article<MovieCardProps>`
   }
 
   img {
-    border-radius: 20px;
+    border-radius: 10px;
   }
 
   span {
@@ -73,6 +73,6 @@ export const Overlay = styled.div`
   right: 0;
   transition: opacity 0.2s;
   background: ${(props) => props.theme.background};
-  border-radius: 18px;
+  border-radius: 10px;
   opacity: 0.35;
 `
