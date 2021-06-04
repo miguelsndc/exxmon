@@ -10,7 +10,7 @@ export const Wrapper = styled.div<WrapperProps>`
   position: relative;
   padding: 1rem;
   margin: 1rem;
-  min-width: 13rem;
+  min-width: 12rem;
   height: 16rem;
   display: flex;
   align-items: flex-end;
