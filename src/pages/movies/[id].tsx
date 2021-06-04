@@ -1,7 +1,8 @@
+import format from 'date-fns/format'
+import enUS from 'date-fns/locale/en-US'
+
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
-import Image from 'next/image'
-import Link from 'next/link'
 
 import { HorizontalScrollSection } from '../../components/HorizontalScroll'
 import { Loading } from '../../components/Loading'
@@ -12,15 +13,17 @@ import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 import { api } from '../../services/api'
 
 import { CtaButton } from '../../styles/pages/Popular'
-import { Container } from '../../styles/globals'
 import {
   MoviePoster,
   Overlay,
   MovieInfo,
   Details,
-  NoResultsContainer,
+  ResultsNotFound,
+  AdditionalInfo,
 } from '../../styles/pages/Id'
-import { useRef } from 'react'
+
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface SimilarMovie {
   id: string
@@ -44,28 +47,25 @@ interface Params {
   similarMovies: SimilarMovie[]
 }
 
-export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
+export default function SpecificMovieDetails({
+  movieDetails,
+  similarMovies,
+}: Params) {
   const router = useRouter()
 
   if (router.isFallback) {
-    console.log('fallback')
-    return (
-      <Container>
-        <Loading />
-      </Container>
-    )
+    return <Loading />
   }
 
   function formatDate(date?: string) {
     if (!date || date == null) return undefined
 
-    const splitted = date?.split('-')
-    const formatted = splitted?.join('/')
+    const currentDate = format(new Date(date), 'MMM/dd/yyyy', { locale: enUS })
 
-    return formatted
+    return currentDate
   }
 
-  const formatedDate = formatDate(movieDetails?.releaseDate)
+  const formattedDate = formatDate(movieDetails?.releaseDate)
 
   const backgroundLoader = ({ src }) => {
     return `https://image.tmdb.org/t/p/original${src}`
@@ -76,78 +76,80 @@ export default function CMovieDetails({ movieDetails, similarMovies }: Params) {
   }
 
   return (
-    <Container>
-      <section>
-        <MoviePoster>
-          <Image
-            loader={backgroundLoader}
-            src={`https://image.tmdb.org/t/p/w500/${movieDetails?.backdropPath}`}
-            layout="fill"
-            objectFit="cover"
-          />
-          <Overlay />
-          <MovieInfo>
-            <div style={{ width: '200px', height: '300px' }}>
-              <Image
-                loader={posterLoader}
-                src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
-                width={200}
-                height={300}
-                layout="fixed"
-              />
-            </div>
+    <section>
+      <MoviePoster>
+        <Image
+          loader={backgroundLoader}
+          src={`https://image.tmdb.org/t/p/w500/${movieDetails?.backdropPath}`}
+          layout="fill"
+          objectFit="cover"
+        />
+        <Overlay />
+        <MovieInfo>
+          <div style={{ width: '200px', height: '300px' }}>
+            <Image
+              loader={posterLoader}
+              src={`https://image.tmdb.org/t/p/w500/${movieDetails?.posterPath}`}
+              width={200}
+              height={300}
+              layout="fixed"
+            />
+          </div>
 
-            <Details>
-              <h2>{movieDetails?.title || movieDetails?.title}</h2>
-              <p>{movieDetails?.overview}</p>
-              <div>
-                <div>
-                  <img src="/assets/images/imdb.svg" alt="IMDB" />
-                  <h2>{movieDetails?.rating}</h2>
-                </div>
-                <div>
-                  <h3>Genres: </h3>
+          <Details>
+            <h2>{movieDetails?.title || movieDetails?.title}</h2>
+            <p>{movieDetails?.overview}</p>
+            <div>
+              <AdditionalInfo>
+                <img src="/assets/images/imdb.svg" alt="IMDB" />
+                <h2>{movieDetails?.rating}</h2>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <h3>
+                  Genres:{' '}
                   {movieDetails?.genres.map((genre, index) => {
                     return <span key={index}>{genre.name},</span>
                   })}
-                </div>
-                <div>
-                  <h3>Release date: </h3>
-                  <span>{formatedDate}</span>
-                </div>
-                <div>
-                  <h3>Status: </h3>
-                  <span>{movieDetails?.status}</span>
-                </div>
-              </div>
-            </Details>
-          </MovieInfo>
-        </MoviePoster>
+                </h3>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <h3>
+                  Release date: <span>{formattedDate}</span>
+                </h3>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <h3>
+                  Status: <span>{movieDetails?.status}</span>
+                </h3>
+              </AdditionalInfo>
+            </div>
+          </Details>
+        </MovieInfo>
+      </MoviePoster>
 
-        {similarMovies.length ? (
-          <HorizontalScrollSection title="Similar Movies">
-            {similarMovies?.map((movie) => {
-              return (
-                <Card
-                  key={movie.id}
-                  onClick={() => router.push(`/movies/${movie.id}`)}
-                  name={movie.title}
-                  popularity={movie.rating}
-                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
-                />
-              )
-            })}
-          </HorizontalScrollSection>
-        ) : (
-          <NoResultsContainer>
-            Could not find any similar movies of: "{movieDetails.title}"
-            <Link href="/movies/popular">
-              <CtaButton>Go back to Popular</CtaButton>
-            </Link>
-          </NoResultsContainer>
-        )}
-      </section>
-    </Container>
+      {similarMovies.length ? (
+        <HorizontalScrollSection title="Similar Movies">
+          {similarMovies?.map((movie) => {
+            return (
+              <Card
+                key={movie.id}
+                onClick={() => router.push(`/movies/${movie.id}`)}
+                name={movie.title}
+                popularity={movie.rating}
+                backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+              />
+            )
+          })}
+        </HorizontalScrollSection>
+      ) : (
+        <ResultsNotFound>
+          Could not find any similar movies of: "{movieDetails.title}"
+          <Link href="/movies/popular">
+            <CtaButton>Go back to Popular</CtaButton>
+          </Link>
+        </ResultsNotFound>
+      )}
+    </section>
   )
 }
 
