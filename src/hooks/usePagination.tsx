@@ -2,41 +2,39 @@ import { useState } from 'react'
 import { api } from '../services/api'
 import { MovieResponse } from '../types/Movie'
 
-export function usePagination(page: number, initialContent) {
+export function usePagination(page: number, initialContent: any[]) {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
   const [currentContent, setCurrentContent] = useState(initialContent)
+  const [hasMore, setHasMore] = useState(true)
 
-  function next(currentPage: number) {
+  async function next(currentPage: number) {
     setIsLoading(true)
-    api
-      .get<MovieResponse>('/movie/popular', {
-        params: {
-          page: currentPage,
-        },
-      })
-      .then(({ data }) => {
-        const newContent = data.results.map((movie) => {
-          return {
-            id: movie.id,
-            posterPath: movie.poster_path,
-            title: movie.title || movie.original_title,
-            rating: movie.vote_average,
-          }
-        })
 
-        if (page >= data.total_pages) {
-          setError('No more content available')
-        } else {
-          setCurrentContent((prevContent) => {
-            return [...prevContent, ...newContent]
-          })
-        }
+    const { data } = await api.get<MovieResponse>('/movie/popular', {
+      params: {
+        page: currentPage,
+      },
+    })
+
+    const newContent = data.results.map((movie) => {
+      return {
+        id: movie.id,
+        posterPath: movie.poster_path,
+        title: movie.title || movie.original_title,
+        rating: movie.vote_average,
+      }
+    })
+
+    if (page >= data.total_pages) {
+      setHasMore(false)
+    } else {
+      setCurrentContent((prevContent) => {
+        return [...prevContent, ...newContent]
       })
-      .finally(() => {
-        setIsLoading(false)
-      })
+    }
+
+    setIsLoading(false)
   }
 
-  return { next, isLoading, currentContent, error }
+  return { next, isLoading, currentContent, hasMore }
 }
