@@ -16,18 +16,18 @@ export function usePagination(page: number, initialContent: any[]) {
       },
     })
 
-    const newContent = data.results.map((movie) => {
-      return {
-        id: movie.id,
-        posterPath: movie.poster_path,
-        title: movie.title || movie.original_title,
-        rating: movie.vote_average,
-      }
-    })
-
-    if (page >= data.total_pages) {
+    if (page === data.total_pages) {
       setHasMore(false)
     } else {
+      const newContent = data.results.map((movie) => {
+        return {
+          id: movie.id,
+          posterPath: movie.poster_path,
+          title: movie.title || movie.original_title,
+          rating: movie.vote_average,
+        }
+      })
+
       setCurrentContent((prevContent) => {
         return [...prevContent, ...newContent]
       })
