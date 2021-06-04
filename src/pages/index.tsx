@@ -1,10 +1,11 @@
 import { GetStaticProps } from 'next'
 
-import { FeaturedMovie } from '../components/FeaturedMovie'
-import { Container } from '../styles/globals'
-import { Card } from '../components/Card'
 import { HorizontalScrollSection } from '../components/HorizontalScroll'
+import { FeaturedMovie } from '../components/FeaturedMovie'
+import { Card } from '../components/Card'
+
 import { api } from '../services/api'
+
 import { MovieDetails, Genre } from '../types/Movie'
 import { ArtistResponse } from '../types/Artist'
 
@@ -28,7 +29,7 @@ interface FeedProps {
 
 export default function Feed({ featuredMovie, mostPopularArtists }: FeedProps) {
   return (
-    <Container>
+    <section>
       <FeaturedMovie
         backdropPath={featuredMovie?.backdropPath}
         originalTitle={featuredMovie?.title}
@@ -47,7 +48,7 @@ export default function Feed({ featuredMovie, mostPopularArtists }: FeedProps) {
           )
         })}
       </HorizontalScrollSection>
-    </Container>
+    </section>
   )
 }
 
