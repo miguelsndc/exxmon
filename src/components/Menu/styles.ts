@@ -44,7 +44,7 @@ export const MenuTitle = styled.span`
   text-transform: uppercase;
   color: ${(props) => props.theme.title};
 `
-export const MenuOption = styled.div`
+export const MenuItem = styled.div`
   display: flex;
   align-items: center;
   margin: 0.5rem 0;

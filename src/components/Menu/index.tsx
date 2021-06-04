@@ -1,4 +1,4 @@
-import { Wrapper, Logo, MenuTitle, MenuOption } from './styles'
+import { Wrapper, Logo, MenuTitle, MenuItem } from './styles'
 
 import Link from 'next/link'
 
@@ -11,7 +11,7 @@ import {
 
 import { BiTrendingUp } from 'react-icons/bi'
 
-export function LeftSidebar() {
+export function Menu() {
   return (
     <Wrapper>
       <Link href="/">
@@ -23,25 +23,25 @@ export function LeftSidebar() {
       <MenuTitle>menu</MenuTitle>
       <nav>
         <Link href="/">
-          <MenuOption>
+          <MenuItem>
             <RiHomeFill color={'#5c5d63'} size="1.5rem" />
             <span>Home</span>
-          </MenuOption>
+          </MenuItem>
         </Link>
         <Link href="/movies/popular">
-          <MenuOption>
+          <MenuItem>
             <BiTrendingUp color={'#5c5d63'} size="1.5rem" />
             <span>Popular</span>
-          </MenuOption>
+          </MenuItem>
         </Link>
-        <MenuOption>
+        <MenuItem>
           <RiCompass4Fill color={'#5c5d63'} size="1.5rem" />
           <span>Discovery</span>
-        </MenuOption>
-        <MenuOption>
+        </MenuItem>
+        <MenuItem>
           <RiTimerFlashLine color={'#5c5d63'} size="1.5rem" />
           <span>Coming Soon</span>
-        </MenuOption>
+        </MenuItem>
       </nav>
     </Wrapper>
   )
