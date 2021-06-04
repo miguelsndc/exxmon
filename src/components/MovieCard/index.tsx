@@ -10,13 +10,8 @@ interface MovieCardProps {
   rating: number
 }
 
-{
-  /* <Overlay />
-
-      > */
-}
-function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
-  const myLoader = ({ src }) => {
+export function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
+  const posterLoader = ({ src }) => {
     return `https://image.tmdb.org/t/p/w500${src}`
   }
 
@@ -26,7 +21,7 @@ function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
         <Overlay />
         {posterPath ? (
           <Image
-            loader={myLoader}
+            loader={posterLoader}
             src={`https://image.tmdb.org/t/p/w500${posterPath}`}
             layout="fill"
           />
@@ -44,5 +39,3 @@ function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
     </Link>
   )
 }
-
-export default MovieCard
