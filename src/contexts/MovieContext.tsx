@@ -5,7 +5,7 @@ import { api } from '../services/api'
 import {
   Genre,
   MovieResponse,
-  Result,
+  Movie,
   GenreResponse,
   MovieDetails,
 } from '../types/Movie'
@@ -18,13 +18,13 @@ interface IMovieProviderProps {
 
 interface MovieContextValue {
   mostPopularArtists?: Artist[]
-  mostPopularMovies?: Result[]
+  mostPopularMovies?: Movie[]
   featuredMovie?: MovieDetails
   allGenres?: GenreResponse
   getMostPopularArtists: () => Promise<ArtistResponse>
   getAllGenres: () => Promise<GenreResponse>
   mapGenreIdsToGenreValues: (
-    movies?: Result[],
+    movies?: Movie[],
     allGenres?: Genre[]
   ) => { genres: (Genre | undefined)[] }[] | undefined
   getMostPopularMovies: (page?: number) => Promise<MovieResponse>
@@ -67,7 +67,7 @@ export function MovieProvider({ children }: IMovieProviderProps) {
     return data
   }
 
-  function mapGenreIdsToGenreValues(movies?: Result[], allGenres?: Genre[]) {
+  function mapGenreIdsToGenreValues(movies?: Movie[], allGenres?: Genre[]) {
     if (!movies || movies == null) return
 
     const genres = movies?.map(({ genre_ids }) => {
@@ -82,7 +82,7 @@ export function MovieProvider({ children }: IMovieProviderProps) {
     return genres
   }
 
-  // function formatMovies(movies: Result[] | undefined) {
+  // function formatMovies(movies: Movie[] | undefined) {
   //   const topMovies = sliceArray(movies, 0, 3)
   //   const formattedMovies = mapGenreIdsToGenreValues(topMovies)
 
