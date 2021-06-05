@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { api } from '../services/api'
 import { MovieResponse } from '../types/Movie'
 
-export function usePagination(page: number, initialContent: any[]) {
+export function usePagination(
+  page: number,
+  initialContent: any[] | null,
+  endpoint: string
+) {
   const [isLoading, setIsLoading] = useState(false)
   const [currentContent, setCurrentContent] = useState(initialContent)
   const [hasMore, setHasMore] = useState(true)
@@ -10,7 +14,7 @@ export function usePagination(page: number, initialContent: any[]) {
   async function next(currentPage: number) {
     setIsLoading(true)
 
-    const { data } = await api.get<MovieResponse>('/movie/popular', {
+    const { data } = await api.get<MovieResponse>(endpoint, {
       params: {
         page: currentPage,
       },
@@ -28,9 +32,13 @@ export function usePagination(page: number, initialContent: any[]) {
         }
       })
 
-      setCurrentContent((prevContent) => {
-        return [...prevContent, ...newContent]
-      })
+      if (initialContent) {
+        setCurrentContent((prevContent) => {
+          return [...prevContent, ...newContent]
+        })
+      } else {
+        setCurrentContent(newContent)
+      }
     }
 
     setIsLoading(false)
