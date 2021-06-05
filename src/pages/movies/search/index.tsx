@@ -1,36 +1,101 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { GridContainer } from '../../../styles/pages/Popular'
+import {
+  Controllers,
+  ResultsFeedback,
+  ErrorMessage,
+} from '../../../styles/pages/Search'
 import { api } from '../../../services/api'
 import { SearchForm } from '../../../styles/pages/Discover'
-import { MovieResponse } from '../../../types/Movie'
+import { Movie, MovieResponse } from '../../../types/Movie'
+import { MovieCard } from '../../../components/MovieCard'
+import { useElementOnScreen } from '../../../hooks/useElementOnScreen'
 
 type FormData = {
   query: string
 }
 
-const sortOptions = [
-  { value: 'popularity.desc', label: 'Popularity' },
-  { value: 'release_date.desc', label: 'Release Date' },
-  { value: 'original_title.desc', label: 'Alphabetical' },
-  { value: 'vote_average.desc', label: 'Rating' },
-]
+export default function SearchMovie() {
+  const [query, setQuery] = useState('')
+  const [hasMore, setHasMore] = useState(true)
+  const [movieResults, setMovieResults] = useState<Movie[]>(null)
 
-export function SearchMovie() {
-  async function getMovies(form?: FormData) {
-    const [query, setQuery] = useState('')
-    const [movieResults, setMovieResults] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+  const [page, setPage] = useState(2)
 
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  const { elementRef, isVisible } = useElementOnScreen({
+    root: containerRef.current,
+    rootMargin: '0px',
+    threshold: 0.3,
+  })
+
+  useEffect(() => {
+    const data = sessionStorage.getItem('@Exxmon/persistedState')
+    const persisted = JSON.parse(data)
+
+    if (persisted) {
+      setQuery(persisted.query)
+      setPage(persisted.page)
+      setMovieResults(persisted.movieResults)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isVisible && query && hasMore) {
+      getMovie(query, page).then((data) => {
+        setMovieResults((prevResults) => {
+          return [...prevResults, ...data.results]
+        })
+
+        setPage((prevPage) => prevPage + 1)
+
+        sessionStorage.setItem(
+          '@Exxmon/persistedState',
+          JSON.stringify({
+            movieResults,
+            page,
+            query,
+          })
+        )
+      })
+    }
+  }, [isVisible, query])
+
+  async function getMovie(query: string, page: number = 1) {
     const { data } = await api.get<MovieResponse>('/search/movie', {
       params: {
-        query: form && form.query,
+        query,
+        page,
       },
     })
+    const hasPages = page < data.total_pages
 
-    setQuery(form.query)
-    console.log(data.results)
-    setMovieResults(data.results)
-    setIsLoading(false)
+    setHasMore(hasPages)
+
+    return data
+  }
+
+  async function searchMovie(form?: FormData) {
+    try {
+      const data = await getMovie(form.query)
+
+      setPage(2)
+      setQuery(form.query)
+      setMovieResults(data.results)
+
+      sessionStorage.setItem(
+        '@Exxmon/persistedState',
+        JSON.stringify({
+          movieResults,
+          page,
+          query,
+        })
+      )
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const {
@@ -40,15 +105,59 @@ export function SearchMovie() {
   } = useForm<FormData>()
 
   return (
-    <div>
-      <SearchForm onSubmit={handleSubmit(getMovies)}>
-        <input
-          type="text"
-          placeholder="Search"
-          {...register('query', { required: true })}
-        />
-        <button type="submit">Search</button>
-      </SearchForm>
+    <div ref={containerRef}>
+      <Controllers>
+        <SearchForm onSubmit={handleSubmit(searchMovie)}>
+          <input
+            type="text"
+            placeholder="Search"
+            {...register('query', { required: true })}
+          />
+          <button type="submit">Search</button>
+        </SearchForm>
+        {errors.query && errors.query.type === 'required' && (
+          <ErrorMessage>Please type something in the search box</ErrorMessage>
+        )}
+        <ResultsFeedback>
+          {movieResults &&
+            (query && movieResults.length ? (
+              <h1>Results for "{query}"</h1>
+            ) : (
+              query &&
+              !movieResults.length && <h1>No results found for "{query}"</h1>
+            ))}
+        </ResultsFeedback>
+        <hr />
+      </Controllers>
+
+      {movieResults && (
+        <GridContainer>
+          {movieResults.map((movie, index) => {
+            if (movieResults.length - 1 === index) {
+              return (
+                <div ref={elementRef} key={movie.id}>
+                  <MovieCard
+                    id={movie.id}
+                    posterPath={movie.poster_path}
+                    rating={movie.vote_average}
+                    title={movie.title || movie.original_title}
+                  />
+                </div>
+              )
+            } else {
+              return (
+                <MovieCard
+                  key={movie.id}
+                  id={movie.id}
+                  posterPath={movie.poster_path}
+                  rating={movie.vote_average}
+                  title={movie.title || movie.original_title}
+                />
+              )
+            }
+          })}
+        </GridContainer>
+      )}
     </div>
   )
 }
