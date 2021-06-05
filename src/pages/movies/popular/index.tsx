@@ -1,6 +1,5 @@
 import { GetStaticProps } from 'next'
 import { useEffect, useRef, useState } from 'react'
-import { Container, FlexCenterX } from '../../../styles/globals'
 
 import { MovieCard } from '../../../components/MovieCard'
 import { Loading } from '../../../components/Loading'
@@ -41,7 +40,8 @@ export default function PopularMovies({
 
   const { currentContent, next, isLoading, hasMore } = usePagination(
     page,
-    mostPopularMovies
+    mostPopularMovies,
+    '/movie/popular'
   )
 
   useEffect(() => {
