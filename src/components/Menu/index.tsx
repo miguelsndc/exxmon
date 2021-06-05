@@ -6,7 +6,7 @@ import {
   RiMovie2Line,
   RiHomeFill,
   RiCompass4Fill,
-  RiTimerFlashLine,
+  RiSearchLine,
 } from 'react-icons/ri'
 
 import { BiTrendingUp } from 'react-icons/bi'
@@ -28,6 +28,12 @@ export function Menu() {
             <span>Home</span>
           </MenuItem>
         </Link>
+        <Link href="/movies/search">
+          <MenuItem>
+            <RiSearchLine color={'#5c5d63'} size="1.5rem" />
+            <span>Search</span>
+          </MenuItem>
+        </Link>
         <Link href="/movies/popular">
           <MenuItem>
             <BiTrendingUp color={'#5c5d63'} size="1.5rem" />
@@ -40,10 +46,6 @@ export function Menu() {
             <span>Discovery</span>
           </MenuItem>
         </Link>
-        <MenuItem>
-          <RiTimerFlashLine color={'#5c5d63'} size="1.5rem" />
-          <span>Coming Soon</span>
-        </MenuItem>
       </nav>
     </Wrapper>
   )
