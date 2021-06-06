@@ -1,6 +1,7 @@
-import React, { SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { SelectControl, Option, Options, SelectedValue } from './styles'
 import { RiArrowDownSLine } from 'react-icons/ri'
+import { Action, Actions } from '../../pages/movies/discover'
 
 interface Option {
   value: string
@@ -10,7 +11,7 @@ interface Option {
 interface SelectProps {
   options: Option[]
   defaultValue?: Option
-  onChange: SetStateAction<any>
+  onChange?: SetStateAction<any> | Dispatch<Action>
 }
 
 export function Select({ options, defaultValue, onChange }: SelectProps) {
@@ -25,14 +26,9 @@ export function Select({ options, defaultValue, onChange }: SelectProps) {
 
   function selectOption(option: Option) {
     setSelectedOption(option)
-    onChange(option)
+    onChange({ type: Actions.selectSortOption, sortOption: option })
+    // onChange(option) -> useState approach
   }
-
-  useEffect(() => {
-    if (defaultValue) {
-      onChange(defaultValue)
-    }
-  }, [])
 
   return (
     <SelectControl onClick={toggleOptions}>
