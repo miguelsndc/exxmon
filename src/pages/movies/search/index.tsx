@@ -107,6 +107,7 @@ export default function SearchMovie() {
   return (
     <div ref={containerRef}>
       <Controllers>
+        <h1>Find your Movies</h1>
         <SearchForm onSubmit={handleSubmit(searchMovie)}>
           <input
             type="text"
@@ -121,10 +122,10 @@ export default function SearchMovie() {
         <ResultsFeedback>
           {movieResults &&
             (query && movieResults.length ? (
-              <h1>Results for "{query}"</h1>
+              <h2>Results for "{query}"</h2>
             ) : (
               query &&
-              !movieResults.length && <h1>No results found for "{query}"</h1>
+              !movieResults.length && <h2>No results found for "{query}"</h2>
             ))}
         </ResultsFeedback>
         <hr />
