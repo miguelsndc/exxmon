@@ -20,6 +20,9 @@ export const Option = styled.div`
   padding: 0.6rem 1rem;
   font-weight: 500;
 
+  user-select: none;
+  cursor: pointer;
+
   &:hover {
     background: #101317;
   }
@@ -50,8 +53,17 @@ export const SelectedValue = styled.div<SelectedValueProps>`
   font-weight: 500;
 
   transition: all 0.2s;
+  cursor: pointer;
+
+  svg {
+    transition: fill 0.2s;
+  }
 
   &:hover {
     border: 2px solid ${(props) => props.theme.red400};
+
+    svg {
+      fill: ${(props) => props.theme.red400};
+    }
   }
 `
