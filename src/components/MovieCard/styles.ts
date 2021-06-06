@@ -10,10 +10,12 @@ export const Card = styled.article<MovieCardProps>`
   text-align: center;
   border-radius: 10px;
 
-  width: 75%;
-  height: 18rem;
+  width: 80%;
+  height: 17rem;
 
   cursor: pointer;
+
+  transition: box-shadow 0.2s;
 
   strong {
     position: absolute;
@@ -32,10 +34,7 @@ export const Card = styled.article<MovieCardProps>`
   }
 
   &:hover {
-    & > div:first-child //overlay
-    {
-      opacity: 0.2;
-    }
+    box-shadow: 0px 0px 1px 4px white;
   }
 `
 
@@ -67,12 +66,13 @@ export const MovieInfo = styled.div`
 
 export const Overlay = styled.div`
   position: absolute;
+  z-index: 2;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   transition: opacity 0.2s;
-  background: ${(props) => props.theme.background};
   border-radius: 10px;
   opacity: 0.35;
+  background: ${(props) => props.theme.background};
 `
