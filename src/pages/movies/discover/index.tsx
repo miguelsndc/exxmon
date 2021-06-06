@@ -1,44 +1,81 @@
-import { useState } from 'react'
+import { useEffect, useReducer } from 'react'
+import { filterReducer } from '../../../reducers/filterReducer'
 import { api } from '../../../services/api'
 import { Movie, MovieResponse } from '../../../types/Movie'
 import { GridContainer } from '../../../styles/pages/Popular'
 import { MovieCard } from '../../../components/MovieCard'
+import { Filters } from '../../../styles/pages/Discover'
 import { Select } from '../../../components/Select'
 import { GetStaticProps } from 'next'
 
-type FormData = {
-  query: string
+export enum Actions {
+  selectSortOption = 'SELECT_SORT_OPTION',
+  setIsLoading = 'SET_IS_LOADING',
+  setMovieResults = 'SET_MOVIE_RESULTS',
 }
 
-const sortOptions = [
+type Option = {
+  value: string
+  label: string
+}
+
+const sortOptions: Option[] = [
   { value: 'popularity.desc', label: 'Popularity' },
   { value: 'release_date.desc', label: 'Release Date' },
   { value: 'original_title.desc', label: 'Alphabetical' },
   { value: 'vote_average.desc', label: 'Rating' },
 ]
 
-export default function Discover() {
-  const [movieResults, setMovieResults] = useState<Movie[]>([])
-  const [selectedSortOption, setSelectedSortOption] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+export type State = {
+  movieResults?: Movie[] | null
+  isLoading?: boolean
+  sortOption?: Option
+}
 
-  async function getMovies(form?: FormData) {
+const initialState: State = {
+  isLoading: true,
+  movieResults: null,
+  sortOption: sortOptions[0],
+}
+
+export type Action =
+  | { type: Actions.selectSortOption; sortOption: Option }
+  | { type: Actions.setMovieResults; movieResults?: Movie[] }
+  | { type: Actions.setIsLoading; isLoading: boolean }
+
+export default function Discover() {
+  const [state, dispatch] = useReducer(filterReducer, initialState)
+
+  async function getMovies() {
     const { data } = await api.get<MovieResponse>('/discover/movie', {
       params: {
-        sort_by: selectedSortOption.value,
+        sort_by: state.sortOption.value,
       },
     })
-    setMovieResults(data.results)
-    setIsLoading(false)
+
+    return data
   }
+
+  useEffect(() => {
+    getMovies().then((data) => {
+      dispatch({ type: Actions.setMovieResults, movieResults: data.results })
+      dispatch({ type: Actions.setIsLoading, isLoading: false })
+    })
+  }, [state.sortOption])
 
   return (
     <div>
       <h1>Discover new Movies</h1>
-
-      {movieResults && (
+      <Filters>
+        <Select
+          options={sortOptions}
+          defaultValue={sortOptions[0]}
+          onChange={dispatch}
+        />
+      </Filters>
+      {state.movieResults && (
         <GridContainer>
-          {movieResults.map((movie) => {
+          {state.movieResults.map((movie) => {
             return (
               <MovieCard
                 key={movie.id}
