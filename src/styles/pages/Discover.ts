@@ -29,3 +29,5 @@ export const SearchForm = styled.form`
     font-weight: 500;
   }
 `
+
+export const Filters = styled.div``
