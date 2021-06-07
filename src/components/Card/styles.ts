@@ -6,19 +6,14 @@ interface WrapperProps {
 
 export const Wrapper = styled.div<WrapperProps>`
   background: ${(props) => props.hasPoster && 'black'};
-  border-radius: 20px;
   position: relative;
   padding: 1rem;
-  margin: 1rem;
+  margin: 1rem 0.5rem;
   min-width: 12rem;
   height: 16rem;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-
-  img {
-    border-radius: 10px;
-  }
 
   cursor: pointer;
 `
@@ -29,7 +24,6 @@ export const Overlay = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  border-radius: 10px;
   background: ${(props) => props.theme.background};
   opacity: 0.45;
   transition: opacity 0.2s;
