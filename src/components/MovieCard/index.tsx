@@ -24,6 +24,7 @@ export function MovieCard({ title, posterPath, rating, id }: MovieCardProps) {
             loader={posterLoader}
             src={`https://image.tmdb.org/t/p/w500${posterPath}`}
             layout="fill"
+            objectFit="cover"
           />
         ) : (
           <strong>Poster not available.</strong>
