@@ -37,7 +37,7 @@ export const Ellipsis = styled.div`
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: ${(props) => props.theme.red400};
+    background: ${(props) => props.theme.primary};
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
   }
   & div:nth-child(1) {

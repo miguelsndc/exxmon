@@ -23,7 +23,7 @@ export const SearchForm = styled.form`
     padding: 0.65rem 1rem;
     border-radius: 10px;
 
-    background: ${(props) => props.theme.red400};
+    background: ${(props) => props.theme.primary};
     font: inherit;
     color: white;
     font-weight: 500;

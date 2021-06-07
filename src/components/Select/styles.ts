@@ -48,7 +48,7 @@ export const SelectedValue = styled.div<SelectedValueProps>`
   margin: 1rem 0;
   border-radius: 10px;
   border: 2px solid
-    ${(props) => (props.areOptionsShown ? props.theme.red400 : '#ededed')};
+    ${(props) => (props.areOptionsShown ? props.theme.primary : '#ededed')};
   padding: 0.6rem;
   font-weight: 500;
 
@@ -60,10 +60,10 @@ export const SelectedValue = styled.div<SelectedValueProps>`
   }
 
   &:hover {
-    border: 2px solid ${(props) => props.theme.red400};
+    border: 2px solid ${(props) => props.theme.primary};
 
     svg {
-      fill: ${(props) => props.theme.red400};
+      fill: ${(props) => props.theme.primary};
     }
   }
 `
