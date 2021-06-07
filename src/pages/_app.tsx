@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
       <MovieProvider>
         <ThemeProvider theme={DarkTheme}>
           <GlobalStyles />
-          <main style={{ display: 'flex' }}>
+          <main>
             <Menu />
             <Container>
               <Component {...pageProps} />
