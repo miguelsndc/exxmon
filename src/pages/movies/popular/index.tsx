@@ -30,10 +30,8 @@ export default function PopularMovies({
 }: PopularMoviesProps) {
   const [page, setPage] = useState(2)
 
-  const containerRef = useRef<HTMLElement | null>(null)
-
   const { elementRef, isVisible } = useElementOnScreen({
-    root: containerRef.current,
+    root: null,
     rootMargin: '0px',
     threshold: 0.3,
   })
@@ -52,7 +50,7 @@ export default function PopularMovies({
   }, [isVisible])
 
   return (
-    <MostPopularSection ref={containerRef}>
+    <MostPopularSection>
       <h1>Most Popular</h1>
       <GridContainer>
         {currentContent?.map((movie, index) => {
@@ -89,16 +87,17 @@ export default function PopularMovies({
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get<MovieResponse>('/movie/popular')
 
-  const mostPopularMovies = data.results.map((movie) => {
+  const formattedMovies = data.results.map((movie) => {
     return {
       id: movie.id,
-      posterPath: movie.poster_path,
+      posterPath: movie.backdrop_path,
       title: movie.title || movie.original_title,
       rating: movie.vote_average,
+      voteCount: movie.vote_count,
     }
   })
 
   return {
-    props: { mostPopularMovies },
+    props: { formattedMovies },
   }
 }
