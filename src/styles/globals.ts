@@ -2,25 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 export const Container = styled.div`
   width: 100%;
-  padding: 2rem 4rem;
   height: 100vh;
-  border-right: 1px solid ${(props) => props.theme.gray400};
-  overflow: auto;
-  &::-webkit-scrollbar {
-    width: 10px;
-  }
-  /* Track */
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  /* Handle */
-  &::-webkit-scrollbar-thumb {
-    background: #16181c;
-  }
-  /* Handle on hover */
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
 `
 
 export const Wrapper = styled.div`
@@ -38,7 +20,7 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: ${(props) => props.theme.background};
     color: ${(props) => props.theme.white}
   }
