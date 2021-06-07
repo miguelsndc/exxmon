@@ -1,8 +1,8 @@
 export const DarkTheme = {
-  background: '#191b1f',
+  background: '#101012',
   white: '#fff',
   gray400: '#2d2d35',
-  red400: '#d12f26',
+  primary: '#f31534',
   text: '#5c5d63',
   title: '#9696a3',
 }
