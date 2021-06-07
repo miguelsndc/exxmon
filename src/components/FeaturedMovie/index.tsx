@@ -1,30 +1,37 @@
 import Link from 'next/link'
 
-import { RiAddFill } from 'react-icons/ri'
-
 import {
   Poster,
   MovieDetails,
   Overlay,
   CtaButton,
-  AddToFavoritesButton,
-  ButtonWrapper,
   Genres,
+  Description,
 } from './styles'
 
 import { Genre } from '../../types/Movie'
 
-interface IFeaturedMovieProps {
+type FeaturedMovieProps = {
   backdropPath?: string
   originalTitle?: string
   genres?: Genre[]
+  overview: string
+  hasCta?: boolean
+  releaseDate?: string
+  rating?: number
+  id?: number | string
 }
 
 export function FeaturedMovie({
   backdropPath,
   originalTitle,
   genres,
-}: IFeaturedMovieProps) {
+  overview,
+  hasCta,
+  releaseDate,
+  rating,
+  id,
+}: FeaturedMovieProps) {
   return (
     <Poster
       backdropPath={`https://image.tmdb.org/t/p/original/${backdropPath}`}
@@ -33,18 +40,32 @@ export function FeaturedMovie({
       <MovieDetails>
         <h1>{originalTitle}</h1>
         <Genres>
-          {genres?.map((genre) => {
-            return <span key={genre.id}>{genre.name}, </span>
+          {releaseDate && (
+            <span>
+              {releaseDate} <span>|</span>{' '}
+            </span>
+          )}
+          {genres?.map((genre, index) => {
+            return (
+              <span key={genre.id}>
+                {index === genres.length - 1 ? (
+                  <>{genre.name}</>
+                ) : (
+                  <>{genre.name}, </>
+                )}
+              </span>
+            )
           })}
         </Genres>
-        <ButtonWrapper>
-          <Link href="/movies/299536">
-            <CtaButton>Know More</CtaButton>
+        <Description>{overview}</Description>
+
+        {hasCta && (
+          <Link href={`/movies/${id}`}>
+            <CtaButton>Read More</CtaButton>
           </Link>
-          <AddToFavoritesButton>
-            <RiAddFill size="2rem" />
-          </AddToFavoritesButton>
-        </ButtonWrapper>
+        )}
+
+        {rating && <h1>{rating}</h1>}
       </MovieDetails>
     </Poster>
   )

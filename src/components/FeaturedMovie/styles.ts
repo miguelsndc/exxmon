@@ -10,37 +10,52 @@ export const Poster = styled.div<PosterProps>`
   background-position: center;
   background-size: cover;
   width: 100%;
-  border-radius: 40px;
   position: relative;
-  height: 32rem;
+
+  display: flex;
+  align-items: center;
+  height: 85vh;
 `
 export const MovieDetails = styled.div`
-  padding-bottom: 4rem;
   padding-left: 3rem;
-  position: absolute;
-  bottom: 0;
+
+  z-index: 2;
+
   h1 {
-    font-weight: 700;
+    font-family: 'Bebas Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+      sans-serif;
     text-transform: uppercase;
-    font-size: 2.5rem;
-    margin-bottom: 5px;
+    line-height: 0.8;
+    font-size: 4.5rem;
   }
+
   span {
-    text-transform: uppercase;
-    font-weight: 700;
-    color: #d3d4de;
+    text-transform: capitalize;
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: white;
   }
 `
 
 export const Genres = styled.div`
-  margin-bottom: 2rem;
+  margin: 1.25rem 0;
+
+  & > span > span {
+    color: ${(props) => props.theme.primary};
+  }
 `
 
 export const Overlay = styled.div`
   position: absolute;
-  border-radius: 10px;
-  background: ${(props) => props.theme.background};
-  opacity: 0.45;
+
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(23, 24, 26, 0) 0%,
+    rgba(16, 16, 18, 1) 100%
+  );
   top: 0;
   left: 0;
   bottom: 0;
@@ -60,19 +75,12 @@ const Button = styled.button`
 `
 
 export const CtaButton = styled(Button)`
-  background: ${(props) => props.theme.red400};
+  background: ${(props) => props.theme.primary};
   padding: 1rem 2.25rem;
 `
 
-export const AddToFavoritesButton = styled(Button)`
-  font-size: 0;
-  background: #4d4a59;
-  opacity: 0.85;
-  padding: 0.65rem;
-  margin-left: 1.4rem;
-`
-
-export const ButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
+export const Description = styled.p`
+  width: 70%;
+  max-width: 900px;
+  margin-bottom: 2rem;
 `
