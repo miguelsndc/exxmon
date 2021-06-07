@@ -1,49 +1,53 @@
 import { GetStaticProps } from 'next'
-
-import { HorizontalScrollSection } from '../components/HorizontalScroll'
-import { FeaturedMovie } from '../components/FeaturedMovie'
 import { Card } from '../components/Card'
+
+import { FeaturedMovie } from '../components/FeaturedMovie'
+import { HorizontalScrollSection } from '../components/HorizontalScroll'
 
 import { api } from '../services/api'
 
-import { MovieDetails, Genre } from '../types/Movie'
-import { ArtistResponse } from '../types/Artist'
+import { Genre, MovieDetails, MovieResponse } from '../types/Movie'
 
-interface Artist {
+type Featured = {
   id: number
-  name: string
-  profilePath: string
-  popularity: number
-}
-
-interface FeaturedMovie {
   backdropPath: string
   title: string
   genres: Genre[]
+  overview: string
 }
 
-interface FeedProps {
-  featuredMovie: FeaturedMovie
-  mostPopularArtists: Artist[]
+type PopularMovie = {
+  id: number
+  posterPath: string
+  title: string
+  rating: number
 }
 
-export default function Feed({ featuredMovie, mostPopularArtists }: FeedProps) {
+type FeedProps = {
+  featuredMovie: Featured
+  mostPopularMovies: PopularMovie[]
+}
+
+export default function Feed({ featuredMovie, mostPopularMovies }: FeedProps) {
   return (
     <section>
       <FeaturedMovie
-        backdropPath={featuredMovie?.backdropPath}
-        originalTitle={featuredMovie?.title}
-        genres={featuredMovie?.genres}
+        id={featuredMovie.id}
+        backdropPath={featuredMovie.backdropPath}
+        originalTitle={featuredMovie.title}
+        genres={featuredMovie.genres}
+        overview={featuredMovie.overview}
+        hasCta
       />
-
-      <HorizontalScrollSection title="Best Artists">
-        {mostPopularArtists?.map((artist) => {
+      <HorizontalScrollSection title="Most Popular" path="/movies/popular">
+        {mostPopularMovies.map((movie) => {
           return (
             <Card
-              key={artist.id}
-              name={artist.name}
-              backdropPath={`https://image.tmdb.org/t/p/w500${artist.profilePath}`}
-              popularity={artist.popularity}
+              key={movie.id}
+              backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+              path={`/movies/${movie.id}`}
+              name={movie.title}
+              popularity={movie.rating}
             />
           )
         })}
@@ -53,31 +57,33 @@ export default function Feed({ featuredMovie, mostPopularArtists }: FeedProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featuredMovieResponse = await api.get<MovieDetails>('/movie/299536')
-  const mostPopularArtistResponse = await api.get<ArtistResponse>(
-    '/person/popular'
+  const featuredMovieResponse = await api.get<MovieDetails>('/movie/337404')
+  const mostPopularMoviesResponse = await api.get<MovieResponse>(
+    '/movie/popular'
   )
 
   const featuredMovie = {
+    id: featuredMovieResponse.data.id,
     backdropPath: featuredMovieResponse.data.backdrop_path,
     title:
       featuredMovieResponse.data.title ||
       featuredMovieResponse.data.original_title,
     genres: featuredMovieResponse.data.genres,
+    overview: featuredMovieResponse.data.overview,
   }
 
-  const mostPopularArtists = mostPopularArtistResponse.data.results.map(
-    (artist) => {
+  const mostPopularMovies = mostPopularMoviesResponse.data.results.map(
+    (movie) => {
       return {
-        id: artist.id,
-        name: artist.name,
-        profilePath: artist.profile_path,
-        popularity: artist.popularity,
+        id: movie.id,
+        posterPath: movie.poster_path,
+        title: movie.title || movie.original_title,
+        rating: movie.vote_average,
       }
     }
   )
 
   return {
-    props: { featuredMovie, mostPopularArtists },
+    props: { featuredMovie, mostPopularMovies },
   }
 }
