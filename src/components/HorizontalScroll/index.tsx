@@ -1,15 +1,24 @@
+import Link from 'next/link'
+
 import { ReactNode, useRef } from 'react'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
 import { Wrapper, Items, Controllers, RoundedButton } from './styles'
 
+enum Directions {
+  Left = 'left',
+  Right = 'right',
+}
+
 interface HorizontalScrollSectionProps {
   children: ReactNode
   title: string
+  path: string
 }
 
 export function HorizontalScrollSection({
   children,
   title,
+  path,
 }: HorizontalScrollSectionProps) {
   const itemsRef = useRef<HTMLDivElement>(null)
 
@@ -17,10 +26,10 @@ export function HorizontalScrollSection({
     const containerWidth = itemsRef.current!.offsetWidth
 
     switch (direction) {
-      case 'right':
+      case Directions.Right:
         itemsRef.current!.scrollLeft += containerWidth / 2
         break
-      case 'left':
+      case Directions.Left:
         itemsRef.current!.scrollLeft -= containerWidth / 2
         break
       default:
@@ -29,27 +38,30 @@ export function HorizontalScrollSection({
   }
 
   function scrollLeft() {
-    scrollTo('left')
+    scrollTo(Directions.Left)
   }
 
   function scrollRight() {
-    scrollTo('right')
+    scrollTo(Directions.Right)
   }
 
   return (
     <Wrapper>
       <header>
         <h3>{title}</h3>
-        <Controllers>
-          <RoundedButton onClick={scrollLeft}>
-            <RiArrowLeftSLine size="1.65rem" color="#fff" />
-          </RoundedButton>
-          <RoundedButton onClick={scrollRight}>
-            <RiArrowRightSLine size="1.65rem" color="#fff" />
-          </RoundedButton>
-        </Controllers>
+        <Link href={path}>
+          <button>See all</button>
+        </Link>
       </header>
-      <Items ref={itemsRef}>{children}</Items>
+      <div>
+        <RoundedButton onClick={scrollLeft} align="left">
+          <RiArrowLeftSLine size="1.65rem" color="#fff" />
+        </RoundedButton>
+        <RoundedButton onClick={scrollRight} align="right">
+          <RiArrowRightSLine size="1.65rem" color="#fff" />
+        </RoundedButton>
+        <Items ref={itemsRef}>{children}</Items>
+      </div>
     </Wrapper>
   )
 }
