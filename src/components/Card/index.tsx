@@ -3,7 +3,6 @@ import { Wrapper, Overlay, Details, Rating } from './styles'
 import { RiStarFill } from 'react-icons/ri'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 interface CardProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -29,7 +28,12 @@ export function Card({
   return (
     <div {...rest} onClick={() => router.push(path)}>
       <Wrapper hasPoster={!!backdropPath}>
-        <Image loader={myLoader} layout="fill" src={`${backdropPath}`} />
+        <Image
+          loader={myLoader}
+          layout="fill"
+          src={`${backdropPath}`}
+          objectFit="cover"
+        />
         <Overlay />
         <Details>
           <span>{name.length > 25 ? `${name.slice(0, 20)}...` : name}</span>
@@ -42,11 +46,3 @@ export function Card({
     </div>
   )
 }
-
-// <Details>
-// <span>{name}</span>
-// <Rating>
-//   <h5>{popularity}</h5>
-//   <RiStarFill color="#F6C800" />
-// </Rating>
-// </Details>
