@@ -1,23 +1,24 @@
-import { Wrapper, Logo, MenuItem, NavigationLinks, SearchForm } from './styles'
+import {
+  Wrapper,
+  Logo,
+  MenuItem,
+  NavigationLinks,
+  MobileMenu,
+  CloseMenu,
+} from './styles'
 
 import Link from 'next/link'
 
-import { RiMovie2Line } from 'react-icons/ri'
-import { useForm } from 'react-hook-form'
+import { RiMovie2Line, RiMenu3Fill, RiCloseCircleLine } from 'react-icons/ri'
+
 import { DarkTheme } from '../../styles/themes/dark'
 import { useEffect, useState } from 'react'
-
-type FormData = {
-  query: string
-}
+import { useRouter } from 'next/router'
 
 export function Menu() {
-  const { register, handleSubmit } = useForm<FormData>()
   const [hasScrolled, setHasScrolled] = useState(false)
-
-  function searchMovie(data: FormData) {
-    console.log(data)
-  }
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   function scroll() {
     if (window.scrollY > 200) {
@@ -25,6 +26,15 @@ export function Menu() {
     } else {
       setHasScrolled(false)
     }
+  }
+
+  function toggleMenu() {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  function redirect(path: string) {
+    setIsMobileMenuOpen(false)
+    router.push(path)
   }
 
   useEffect(() => {
@@ -44,26 +54,34 @@ export function Menu() {
             <span>Exxmon</span>
           </Logo>
         </Link>
-        <NavigationLinks>
-          <div>
-            <Link href="/">
-              <MenuItem>Home</MenuItem>
-            </Link>
-            <Link href="/movies/popular">
-              <MenuItem>Popular</MenuItem>
-            </Link>
-            <Link href="/movies/discover">
-              <MenuItem>Discovery</MenuItem>
-            </Link>
-          </div>
-          <SearchForm onSubmit={handleSubmit(searchMovie)}>
-            <input
-              type="text"
-              placeholder="Search"
-              {...register('query', { required: true })}
-            />
-          </SearchForm>
-        </NavigationLinks>
+        <MobileMenu onClick={toggleMenu}>
+          <RiMenu3Fill size={'2rem'} color={DarkTheme.primary} />
+        </MobileMenu>
+        {isMobileMenuOpen && (
+          <NavigationLinks>
+            <CloseMenu>
+              <RiCloseCircleLine
+                onClick={toggleMenu}
+                size={'2rem'}
+                color={DarkTheme.primary}
+              />
+            </CloseMenu>
+
+            <MenuItem onClick={() => redirect('/')}>Home</MenuItem>
+
+            <MenuItem onClick={() => redirect('/movies/popular')}>
+              Popular
+            </MenuItem>
+
+            <MenuItem onClick={() => redirect('/movies/discover')}>
+              Discovery
+            </MenuItem>
+
+            <MenuItem onClick={() => redirect('/movies/search')}>
+              Search
+            </MenuItem>
+          </NavigationLinks>
+        )}
       </nav>
     </Wrapper>
   )
