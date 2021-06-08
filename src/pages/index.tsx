@@ -23,6 +23,7 @@ type Featured = {
   title: string
   genres: Genre[]
   overview: string
+  tagline: string
 }
 
 type PopularMovie = {
@@ -39,7 +40,7 @@ type FeedProps = {
   genres: Genre[]
 }
 
-type dum = {
+type MovieRelativeToGenre = {
   name: string
   data: Movie[]
 }
@@ -50,8 +51,9 @@ export default function Feed({
   topRatedMovies,
   genres,
 }: FeedProps) {
-  const [movies, setMovies] = useState<dum[]>(null)
+  const [movies, setMovies] = useState<MovieRelativeToGenre[]>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [genreIndex, setGenreIndex] = useState(0)
 
   const { elementRef, isVisible } = useElementOnScreen({
     root: null,
@@ -69,11 +71,18 @@ export default function Feed({
     return { name: genre.name, data: movieRes.data.results }
   }
 
-  const [genreIndex, setGenreIndex] = useState(0)
+  useEffect(() => {
+    const data = sessionStorage.getItem('@Exxmon/homePersistedState')
+    const persisted = JSON.parse(data)
+
+    if (persisted) {
+      setMovies(persisted.movies)
+      setGenreIndex(persisted.genreIndex)
+    }
+  }, [])
 
   useEffect(() => {
     if (isVisible && genreIndex < genres.length) {
-      console.log(genreIndex)
       setIsLoading(true)
       getMovieByGenre(genres[genreIndex])
         .then((res) => {
@@ -100,16 +109,6 @@ export default function Feed({
     }
   }, [isVisible])
 
-  useEffect(() => {
-    const data = sessionStorage.getItem('@Exxmon/homePersistedState')
-    const persisted = JSON.parse(data)
-
-    if (persisted) {
-      setMovies(persisted.movies)
-      setGenreIndex(persisted.genreIndex)
-    }
-  }, [])
-
   return (
     <section>
       <FeaturedMovie
@@ -118,6 +117,7 @@ export default function Feed({
         originalTitle={featuredMovie.title}
         genres={featuredMovie.genres}
         overview={featuredMovie.overview}
+        tagline={featuredMovie.tagline}
         hasCta
       />
       <HorizontalScrollSection title="Most Popular" path="/movies/popular">
@@ -160,7 +160,7 @@ export default function Feed({
                 return (
                   <Card
                     key={movie.id}
-                    backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    backdropPath={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
                     path={`/movies/${movie.id}`}
                     name={movie.title}
                     popularity={movie.vote_average}
@@ -176,7 +176,6 @@ export default function Feed({
           style={{
             display: 'flex',
             justifyContent: 'center',
-            marginTop: '1rem',
           }}
         >
           <Loading />
@@ -187,7 +186,7 @@ export default function Feed({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featuredMovieResponse = await api.get<MovieDetails>('/movie/337404')
+  const featuredMovieResponse = await api.get<MovieDetails>('/movie/299536')
   const mostPopularMoviesResponse = await api.get<MovieResponse>(
     '/movie/popular'
   )
@@ -204,13 +203,14 @@ export const getStaticProps: GetStaticProps = async () => {
       featuredMovieResponse.data.original_title,
     genres: featuredMovieResponse.data.genres,
     overview: featuredMovieResponse.data.overview,
+    tagline: featuredMovieResponse.data.tagline || 'No tagline',
   }
 
   const mostPopularMovies = mostPopularMoviesResponse.data.results.map(
     (movie) => {
       return {
         id: movie.id,
-        posterPath: movie.poster_path,
+        posterPath: movie.backdrop_path,
         title: movie.title || movie.original_title,
         rating: movie.vote_average,
       }
@@ -220,7 +220,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const topRatedMovies = topRatedMoviesResponse.data.results.map((movie) => {
     return {
       id: movie.id,
-      posterPath: movie.poster_path,
+      posterPath: movie.backdrop_path,
       title: movie.title || movie.original_title,
       rating: movie.vote_average,
     }
@@ -230,5 +230,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { featuredMovie, mostPopularMovies, topRatedMovies, genres },
+    revalidate: 86400,
   }
 }
