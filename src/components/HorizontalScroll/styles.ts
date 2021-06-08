@@ -5,7 +5,7 @@ type ButtonProps = {
 }
 
 export const Wrapper = styled.div`
-  margin: 1rem 0;
+  margin: 3rem 0;
 
   &::-webkit-scrollbar {
     display: none;
@@ -37,6 +37,7 @@ export const Wrapper = styled.div`
 `
 
 export const Items = styled.div`
+  padding-left: 2%;
   display: flex;
   overflow-x: scroll;
   scroll-behavior: smooth;
@@ -49,15 +50,6 @@ export const Items = styled.div`
   &:first-child {
     margin-left: 1rem;
   }
-`
-
-export const Controllers = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 9;
-  position: absolute;
-  width: 96%;
 `
 
 export const RoundedButton = styled.button<ButtonProps>`
@@ -87,5 +79,9 @@ export const RoundedButton = styled.button<ButtonProps>`
 
   &:hover {
     filter: brightness(0.9);
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
   }
 `
