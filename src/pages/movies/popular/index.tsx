@@ -87,7 +87,7 @@ export default function PopularMovies({
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get<MovieResponse>('/movie/popular')
 
-  const formattedMovies = data.results.map((movie) => {
+  const mostPopularMovies = data.results.map((movie) => {
     return {
       id: movie.id,
       posterPath: movie.backdrop_path,
@@ -98,6 +98,6 @@ export const getStaticProps: GetStaticProps = async () => {
   })
 
   return {
-    props: { formattedMovies },
+    props: { mostPopularMovies },
   }
 }
