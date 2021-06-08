@@ -7,19 +7,33 @@ export const Poster = styled.div`
   display: flex;
   align-items: center;
   height: 85vh;
+
+  @media (max-width: 600px) {
+    text-align: center;
+    justify-content: center;
+  }
 `
 export const MovieDetails = styled.div`
   padding-left: 3rem;
 
   z-index: 2;
 
-  h1 {
+  h1,
+  h2 {
     font-family: 'Bebas Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI',
       Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
       sans-serif;
     text-transform: uppercase;
     line-height: 0.8;
+  }
+
+  h1 {
     font-size: 5.25rem;
+  }
+
+  h2 {
+    font-size: 4.5rem;
+    margin-bottom: 1.25rem;
   }
 
   span {
@@ -27,6 +41,14 @@ export const MovieDetails = styled.div`
     font-weight: 500;
     font-size: 1.2rem;
     color: white;
+  }
+
+  @media (max-width: 600px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 0rem;
   }
 `
 
@@ -75,4 +97,8 @@ export const Description = styled.p`
   width: 70%;
   max-width: 900px;
   margin-bottom: 2rem;
+
+  @media (max-width: 700px) {
+    width: 90%;
+  }
 `
