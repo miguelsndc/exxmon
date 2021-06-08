@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { MovieCard } from '../../../components/MovieCard'
 import { Loading } from '../../../components/Loading'
