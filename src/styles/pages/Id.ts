@@ -16,14 +16,10 @@ export const MoviePoster = styled.div`
   position: relative;
 
   width: 100%;
-  height: 85vh;
+  height: 95vh;
   display: flex;
   align-items: flex-end;
   animation: ${Fade} 1s;
-
-  img {
-    border-radius: 10px;
-  }
 `
 
 export const Overlay = styled.div`
@@ -76,7 +72,7 @@ export const ResultsNotFound = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 2rem;
+  margin: 2rem 0;
 `
 export const AdditionalInfo = styled.div`
   display: flex;
