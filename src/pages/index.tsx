@@ -56,7 +56,7 @@ export default function Feed({
   const { elementRef, isVisible } = useElementOnScreen({
     root: null,
     rootMargin: '0px',
-    threshold: 0.3,
+    threshold: 0.5,
   })
 
   async function getMovieByGenre(genre: { name: string; id: number }) {
@@ -84,10 +84,10 @@ export default function Feed({
           } else {
             setMovies([res])
           }
-          setGenreIndex((prevIndex) => prevIndex + 1)
         })
         .finally(() => {
           setIsLoading(false)
+          setGenreIndex((prevIndex) => prevIndex + 1)
         })
     }
   }, [isVisible])
@@ -176,6 +176,7 @@ export default function Feed({
             )
           }
         })}
+      <div ref={elementRef}></div>
       {isLoading && (
         <div
           style={{
@@ -187,7 +188,6 @@ export default function Feed({
           <Loading />
         </div>
       )}
-      <div ref={elementRef}>DDDDD</div>
     </section>
   )
 }
