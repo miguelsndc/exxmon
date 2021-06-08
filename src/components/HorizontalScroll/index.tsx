@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { ReactNode, useRef } from 'react'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
-import { Wrapper, Items, Controllers, RoundedButton } from './styles'
+import { Wrapper, Items, RoundedButton } from './styles'
 
 enum Directions {
   Left = 'left',
@@ -27,10 +27,10 @@ export function HorizontalScrollSection({
 
     switch (direction) {
       case Directions.Right:
-        itemsRef.current!.scrollLeft += containerWidth / 2
+        itemsRef.current!.scrollLeft += containerWidth / 1.5
         break
       case Directions.Left:
-        itemsRef.current!.scrollLeft -= containerWidth / 2
+        itemsRef.current!.scrollLeft -= containerWidth / 1.5
         break
       default:
         break
@@ -48,7 +48,7 @@ export function HorizontalScrollSection({
   return (
     <Wrapper>
       <header>
-        <h3>{title}</h3>
+        <h2>{title}</h2>
         <Link href={path}>
           <button>See all</button>
         </Link>
