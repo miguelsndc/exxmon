@@ -19,7 +19,7 @@ export const MovieDetails = styled.div`
       sans-serif;
     text-transform: uppercase;
     line-height: 0.8;
-    font-size: 4.5rem;
+    font-size: 5.25rem;
   }
 
   span {
