@@ -31,6 +31,14 @@ export const Card = styled.article<MovieCardProps>`
   &:hover {
     box-shadow: 0px 0px 1px 4px white;
   }
+
+  @media (max-width: 1280px) {
+    height: 20rem;
+  }
+
+  @media (max-width: 768px) {
+    height: 16rem;
+  }
 `
 
 export const MovieInfo = styled.div`
