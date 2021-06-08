@@ -99,5 +99,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { mostPopularMovies },
+    revalidate: 86400,
   }
 }
