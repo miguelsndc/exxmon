@@ -1,14 +1,6 @@
 import styled from 'styled-components'
 
-interface PosterProps {
-  backdropPath: string
-}
-
-export const Poster = styled.div<PosterProps>`
-  background-image: ${(props) => `url(${props.backdropPath})`};
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+export const Poster = styled.div`
   width: 100%;
   position: relative;
 

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 import {
   Poster,
@@ -32,10 +33,19 @@ export function FeaturedMovie({
   rating,
   id,
 }: FeaturedMovieProps) {
+  const backdropLoader = ({ src }) => {
+    return `https://image.tmdb.org/t/p/original/${src}`
+  }
+
   return (
-    <Poster
-      backdropPath={`https://image.tmdb.org/t/p/original/${backdropPath}`}
-    >
+    <Poster>
+      <Image
+        loader={backdropLoader}
+        layout="fill"
+        objectFit="cover"
+        src={`https://image.tmdb.org/t/p/original/${backdropPath}`}
+      />
+
       <Overlay />
       <MovieDetails>
         <h1>{originalTitle}</h1>
