@@ -1,12 +1,21 @@
 import { GetStaticProps } from 'next'
+import { useEffect, useState } from 'react'
 import { Card } from '../components/Card'
 
 import { FeaturedMovie } from '../components/FeaturedMovie'
 import { HorizontalScrollSection } from '../components/HorizontalScroll'
+import { Loading } from '../components/Loading'
+import { useElementOnScreen } from '../hooks/useElementOnScreen'
 
 import { api } from '../services/api'
 
-import { Genre, MovieDetails, MovieResponse } from '../types/Movie'
+import {
+  Genre,
+  GenreResponse,
+  Movie,
+  MovieDetails,
+  MovieResponse,
+} from '../types/Movie'
 
 type Featured = {
   id: number
@@ -26,9 +35,63 @@ type PopularMovie = {
 type FeedProps = {
   featuredMovie: Featured
   mostPopularMovies: PopularMovie[]
+  topRatedMovies: PopularMovie[]
+  genres: Genre[]
 }
 
-export default function Feed({ featuredMovie, mostPopularMovies }: FeedProps) {
+type dum = {
+  name: string
+  data: Movie[]
+}
+
+export default function Feed({
+  featuredMovie,
+  mostPopularMovies,
+  topRatedMovies,
+  genres,
+}: FeedProps) {
+  const [movies, setMovies] = useState<dum[]>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { elementRef, isVisible } = useElementOnScreen({
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.3,
+  })
+
+  async function getMovieByGenre(genre: { name: string; id: number }) {
+    const movieRes = await api.get<MovieResponse>('/discover/movie', {
+      params: {
+        with_genres: genre.id,
+      },
+    })
+
+    return { name: genre.name, data: movieRes.data.results }
+  }
+
+  const [genreIndex, setGenreIndex] = useState(0)
+
+  useEffect(() => {
+    if (isVisible && genreIndex < genres.length) {
+      console.log(genreIndex)
+      setIsLoading(true)
+      getMovieByGenre(genres[genreIndex])
+        .then((res) => {
+          if (movies) {
+            setMovies((prevMovies) => {
+              return [...prevMovies, res]
+            })
+          } else {
+            setMovies([res])
+          }
+          setGenreIndex((prevIndex) => prevIndex + 1)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+  }, [isVisible])
+
   return (
     <section>
       <FeaturedMovie
@@ -52,6 +115,79 @@ export default function Feed({ featuredMovie, mostPopularMovies }: FeedProps) {
           )
         })}
       </HorizontalScrollSection>
+
+      <HorizontalScrollSection title="Top Rated" path="/movies/popular">
+        {topRatedMovies.map((movie) => {
+          return (
+            <Card
+              key={movie.id}
+              backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+              path={`/movies/${movie.id}`}
+              name={movie.title}
+              popularity={movie.rating}
+            />
+          )
+        })}
+      </HorizontalScrollSection>
+
+      {movies &&
+        movies.map((movie, index) => {
+          if (movie.data.length - 1 === index) {
+            return (
+              <div ref={elementRef}>
+                <HorizontalScrollSection
+                  title={movie.name}
+                  path="/movies/popular"
+                  key={movie.name}
+                >
+                  {movie.data.map((movie) => {
+                    return (
+                      <Card
+                        key={movie.id}
+                        backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                        path={`/movies/${movie.id}`}
+                        name={movie.title}
+                        popularity={movie.vote_average}
+                      />
+                    )
+                  })}
+                </HorizontalScrollSection>
+              </div>
+            )
+          } else {
+            return (
+              <HorizontalScrollSection
+                title={movie.name}
+                path="/movies/popular"
+                key={movie.name}
+              >
+                {movie.data.map((movie) => {
+                  return (
+                    <Card
+                      key={movie.id}
+                      backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                      path={`/movies/${movie.id}`}
+                      name={movie.title}
+                      popularity={movie.vote_average}
+                    />
+                  )
+                })}
+              </HorizontalScrollSection>
+            )
+          }
+        })}
+      {isLoading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '1rem',
+          }}
+        >
+          <Loading />
+        </div>
+      )}
+      <div ref={elementRef}>DDDDD</div>
     </section>
   )
 }
@@ -61,6 +197,10 @@ export const getStaticProps: GetStaticProps = async () => {
   const mostPopularMoviesResponse = await api.get<MovieResponse>(
     '/movie/popular'
   )
+  const topRatedMoviesResponse = await api.get<MovieResponse>(
+    '/movie/top_rated'
+  )
+  const genreListRes = await api.get<GenreResponse>('/genre/movie/list')
 
   const featuredMovie = {
     id: featuredMovieResponse.data.id,
@@ -83,7 +223,18 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   )
 
+  const topRatedMovies = topRatedMoviesResponse.data.results.map((movie) => {
+    return {
+      id: movie.id,
+      posterPath: movie.poster_path,
+      title: movie.title || movie.original_title,
+      rating: movie.vote_average,
+    }
+  })
+
+  const genres = genreListRes.data.genres
+
   return {
-    props: { featuredMovie, mostPopularMovies },
+    props: { featuredMovie, mostPopularMovies, topRatedMovies, genres },
   }
 }
