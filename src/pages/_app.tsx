@@ -2,13 +2,10 @@ import Head from 'next/head'
 
 import { ThemeProvider } from 'styled-components'
 
-import { GlobalStyles } from '../styles/globals'
-import { Container } from '../styles/globals'
-
 import { Menu } from '../components/Menu'
 
+import { GlobalStyles } from '../styles/globals'
 import { DarkTheme } from '../styles/themes/dark'
-import { MovieProvider } from '../contexts/MovieContext'
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -16,17 +13,13 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Exxmon</title>
       </Head>
-      <MovieProvider>
-        <ThemeProvider theme={DarkTheme}>
-          <GlobalStyles />
-          <main>
-            <Menu />
-            <Container>
-              <Component {...pageProps} />
-            </Container>
-          </main>
-        </ThemeProvider>
-      </MovieProvider>
+      <ThemeProvider theme={DarkTheme}>
+        <GlobalStyles />
+        <main>
+          <Menu />
+          <Component {...pageProps} />
+        </main>
+      </ThemeProvider>
     </>
   )
 }
