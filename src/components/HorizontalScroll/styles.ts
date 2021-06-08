@@ -5,7 +5,7 @@ type ButtonProps = {
 }
 
 export const Wrapper = styled.div`
-  margin: 3rem 0;
+  margin: 1rem 0;
 
   &::-webkit-scrollbar {
     display: none;
