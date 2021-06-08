@@ -45,6 +45,7 @@ export function FeaturedMovie({
         loader={backdropLoader}
         layout="fill"
         objectFit="cover"
+        priority={true}
         src={`https://image.tmdb.org/t/p/original/${backdropPath}`}
       />
 
