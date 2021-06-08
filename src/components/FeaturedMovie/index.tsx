@@ -16,7 +16,8 @@ type FeaturedMovieProps = {
   backdropPath?: string
   originalTitle?: string
   genres?: Genre[]
-  overview: string
+  overview?: string
+  showOverview?: boolean
   hasCta?: boolean
   releaseDate?: string
   rating?: number
@@ -32,6 +33,7 @@ export function FeaturedMovie({
   releaseDate,
   rating,
   id,
+  showOverview,
 }: FeaturedMovieProps) {
   const backdropLoader = ({ src }) => {
     return `https://image.tmdb.org/t/p/original/${src}`
@@ -56,26 +58,25 @@ export function FeaturedMovie({
             </span>
           )}
           {genres?.map((genre, index) => {
+            const isLast = index === genres.length - 1
+
             return (
               <span key={genre.id}>
-                {index === genres.length - 1 ? (
-                  <>{genre.name}</>
-                ) : (
-                  <>{genre.name}, </>
-                )}
+                {genre.name}
+                {isLast ? '' : ', '}
               </span>
             )
           })}
         </Genres>
-        <Description>{overview}</Description>
+        {rating && <h2>{rating}</h2>}
+
+        <Description>{showOverview && overview}</Description>
 
         {hasCta && (
           <Link href={`/movies/${id}`}>
             <CtaButton>Read More</CtaButton>
           </Link>
         )}
-
-        {rating && <h1>{rating}</h1>}
       </MovieDetails>
     </Poster>
   )
