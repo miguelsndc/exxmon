@@ -5,6 +5,7 @@ import {
   Controllers,
   ResultsFeedback,
   ErrorMessage,
+  SearchContainer,
 } from '../../../styles/pages/Search'
 import { api } from '../../../services/api'
 import { SearchForm } from '../../../styles/pages/Discover'
@@ -105,7 +106,7 @@ export default function SearchMovie() {
   } = useForm<FormData>()
 
   return (
-    <div ref={containerRef}>
+    <SearchContainer ref={containerRef}>
       <Controllers>
         <h1>Find your Movies</h1>
         <SearchForm onSubmit={handleSubmit(searchMovie)}>
@@ -159,6 +160,6 @@ export default function SearchMovie() {
           })}
         </GridContainer>
       )}
-    </div>
+    </SearchContainer>
   )
 }
