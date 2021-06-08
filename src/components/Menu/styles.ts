@@ -1,13 +1,22 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 type WrapperProps = {
   hasScrolled: boolean
 }
 
+const Fade = keyframes`
+  from{
+    opacity:0
+  }
+  to {
+    opacity: 1
+  }
+`
+
 export const Wrapper = styled.header<WrapperProps>`
   width: 100%;
-  height: 8vh;
-  padding: 0.5rem 1rem;
+  min-height: 10vh;
+  padding: 1rem 1rem;
 
   display: flex;
   align-items: center;
@@ -59,13 +68,26 @@ export const MenuTitle = styled.span`
   text-transform: uppercase;
   color: ${(props) => props.theme.white};
 `
+
 export const MenuItem = styled.span`
-  margin-right: 3rem;
   cursor: pointer;
   color: ${(props) => props.theme.white};
 
   &:hover {
     color: ${(props) => props.theme.white};
+  }
+
+  &:not(:last-child) {
+    margin-right: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    &:not(:last-child) {
+      margin-right: 0;
+    }
+
+    font-size: 1.25rem;
+    font-weight: 500;
   }
 `
 
@@ -74,36 +96,37 @@ export const NavigationLinks = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  animation: ${Fade} 0.2s;
+
+  @media (max-width: 768px) {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    text-align: center;
+    background: ${(props) => props.theme.background};
+
+    justify-content: space-evenly;
+
+    flex-direction: column;
+  }
 `
 
-export const SearchForm = styled.form`
-  input[type='text'] {
-    border: 2px solid ${(props) => props.theme.white};
-    outline: 0;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    font-weight: 500;
+export const MobileMenu = styled.div`
+  font-size: 0;
 
-    font: inherit;
-    color: white;
-
-    background: transparent;
-    margin-right: 1rem;
-
-    &::placeholder {
-      color: white;
-    }
+  @media (min-width: 768px) {
+    display: none;
   }
+`
 
-  button[type='submit'] {
-    border: 0;
-    outline: 0;
-    padding: 0.65rem 1rem;
-    border-radius: 10px;
-
-    background: ${(props) => props.theme.primary};
-    font: inherit;
-    color: white;
-    font-weight: 500;
-  }
+export const CloseMenu = styled.div`
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 `
