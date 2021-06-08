@@ -56,7 +56,7 @@ export default function Feed({
   const { elementRef, isVisible } = useElementOnScreen({
     root: null,
     rootMargin: '0px',
-    threshold: 0.5,
+    threshold: 0.3,
   })
 
   async function getMovieByGenre(genre: { name: string; id: number }) {
@@ -84,13 +84,31 @@ export default function Feed({
           } else {
             setMovies([res])
           }
+          setGenreIndex((prevIndex) => prevIndex + 1)
         })
         .finally(() => {
           setIsLoading(false)
-          setGenreIndex((prevIndex) => prevIndex + 1)
+
+          sessionStorage.setItem(
+            '@Exxmon/homePersistedState',
+            JSON.stringify({
+              genreIndex,
+              movies,
+            })
+          )
         })
     }
   }, [isVisible])
+
+  useEffect(() => {
+    const data = sessionStorage.getItem('@Exxmon/homePersistedState')
+    const persisted = JSON.parse(data)
+
+    if (persisted) {
+      setMovies(persisted.movies)
+      setGenreIndex(persisted.genreIndex)
+    }
+  }, [])
 
   return (
     <section>
@@ -131,52 +149,28 @@ export default function Feed({
       </HorizontalScrollSection>
 
       {movies &&
-        movies.map((movie, index) => {
-          if (movie.data.length - 1 === index) {
-            return (
-              <div ref={elementRef}>
-                <HorizontalScrollSection
-                  title={movie.name}
-                  path="/movies/popular"
-                  key={movie.name}
-                >
-                  {movie.data.map((movie) => {
-                    return (
-                      <Card
-                        key={movie.id}
-                        backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        path={`/movies/${movie.id}`}
-                        name={movie.title}
-                        popularity={movie.vote_average}
-                      />
-                    )
-                  })}
-                </HorizontalScrollSection>
-              </div>
-            )
-          } else {
-            return (
-              <HorizontalScrollSection
-                title={movie.name}
-                path="/movies/popular"
-                key={movie.name}
-              >
-                {movie.data.map((movie) => {
-                  return (
-                    <Card
-                      key={movie.id}
-                      backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                      path={`/movies/${movie.id}`}
-                      name={movie.title}
-                      popularity={movie.vote_average}
-                    />
-                  )
-                })}
-              </HorizontalScrollSection>
-            )
-          }
+        movies.map((movie) => {
+          return (
+            <HorizontalScrollSection
+              title={movie.name}
+              path="/movies/popular"
+              key={movie.name}
+            >
+              {movie.data.map((movie) => {
+                return (
+                  <Card
+                    key={movie.id}
+                    backdropPath={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    path={`/movies/${movie.id}`}
+                    name={movie.title}
+                    popularity={movie.vote_average}
+                  />
+                )
+              })}
+            </HorizontalScrollSection>
+          )
         })}
-      <div ref={elementRef}></div>
+      <div ref={elementRef}>DDDDD</div>
       {isLoading && (
         <div
           style={{
