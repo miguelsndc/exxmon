@@ -76,6 +76,6 @@ export const Overlay = styled.div`
   right: 0;
   transition: opacity 0.2s;
 
-  opacity: 0.35;
+  opacity: 0.2;
   background: ${(props) => props.theme.background};
 `
