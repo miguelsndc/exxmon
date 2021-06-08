@@ -54,6 +54,7 @@ export default function SpecificMovieDetails({
     <section>
       <MoviePoster>
         <FeaturedMovie
+          showOverview
           backdropPath={movieDetails.backdropPath}
           overview={movieDetails.overview}
           genres={movieDetails.genres}
@@ -123,8 +124,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     genres: movieDetailsResponse.data.genres,
     status: movieDetailsResponse.data.status,
   }
-
-  console.log(movieDetails)
 
   const similarMoviesResponse = await api.get<MovieResponse>(
     `/movie/${id}/similar`
