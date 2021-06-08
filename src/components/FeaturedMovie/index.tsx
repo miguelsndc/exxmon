@@ -8,6 +8,7 @@ import {
   CtaButton,
   Genres,
   Description,
+  PosterFallback,
 } from './styles'
 
 import { Genre } from '../../types/Movie'
@@ -22,6 +23,7 @@ type FeaturedMovieProps = {
   releaseDate?: string
   rating?: number
   id?: number | string
+  tagline?: string
 }
 
 export function FeaturedMovie({
@@ -33,6 +35,7 @@ export function FeaturedMovie({
   releaseDate,
   rating,
   id,
+  tagline,
   showOverview,
 }: FeaturedMovieProps) {
   const backdropLoader = ({ src }) => {
@@ -40,18 +43,25 @@ export function FeaturedMovie({
   }
 
   return (
-    <Poster>
-      <Image
-        loader={backdropLoader}
-        layout="fill"
-        objectFit="cover"
-        priority={true}
-        src={`https://image.tmdb.org/t/p/original/${backdropPath}`}
-      />
+    <Poster hasPoster={!!backdropPath}>
+      {backdropPath ? (
+        <Image
+          loader={backdropLoader}
+          layout="fill"
+          objectFit="cover"
+          priority={true}
+          src={`https://image.tmdb.org/t/p/original/${backdropPath}`}
+        />
+      ) : (
+        <PosterFallback>
+          <h2>poster not available</h2>
+        </PosterFallback>
+      )}
 
       <Overlay />
       <MovieDetails>
-        <h1>{originalTitle}</h1>
+        {tagline && <h1>"{tagline}"</h1>}
+        <h2>{originalTitle}</h2>
         <Genres>
           {releaseDate && (
             <span>
