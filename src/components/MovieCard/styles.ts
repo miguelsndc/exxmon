@@ -9,6 +9,10 @@ export const Card = styled.article<MovieCardProps>`
   position: relative;
   text-align: center;
 
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
   width: 100%;
   height: 22rem;
 
@@ -45,11 +49,6 @@ export const MovieInfo = styled.div`
   display: flex;
   width: 90%;
   flex-direction: column;
-  position: absolute;
-
-  top: 85%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 
   z-index: 9;
   span {
