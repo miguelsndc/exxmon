@@ -1,8 +1,9 @@
-import { Wrapper, Overlay, Details, Rating } from './styles'
+import Image from 'next/image'
 
 import { RiStarFill } from 'react-icons/ri'
 
-import Image from 'next/image'
+import { Wrapper, Overlay, Details, Rating } from './styles'
+
 import { useRouter } from 'next/router'
 
 interface CardProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -21,7 +22,7 @@ export function Card({
 }: CardProps) {
   const router = useRouter()
 
-  const myLoader = ({ src }) => {
+  const posterLoader = ({ src }) => {
     return `${src}`
   }
 
@@ -29,9 +30,9 @@ export function Card({
     <div {...rest} onClick={() => router.push(path)}>
       <Wrapper hasPoster={!!backdropPath}>
         <Image
-          loader={myLoader}
-          layout="fill"
+          loader={posterLoader}
           src={`${backdropPath}`}
+          layout="fill"
           objectFit="cover"
         />
         <Overlay />
