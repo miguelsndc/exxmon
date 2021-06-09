@@ -54,13 +54,17 @@ export const Items = styled.div`
 
 export const RoundedButton = styled.button<ButtonProps>`
   position: absolute;
+
   border: 2px solid white;
   border-radius: 50%;
+
   width: 3rem;
   height: 3rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   margin: 0 0.5rem;
   transition: filter 0.2s;
   background: white;

@@ -4,15 +4,6 @@ type WrapperProps = {
   hasScrolled: boolean
 }
 
-const Fade = keyframes`
-  from{
-    opacity:0
-  }
-  to {
-    opacity: 1
-  }
-`
-
 export const Wrapper = styled.header<WrapperProps>`
   width: 100%;
   min-height: 10vh;

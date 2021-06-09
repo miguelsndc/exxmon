@@ -123,23 +123,6 @@ export const Overlay = styled.div`
   right: 0;
 `
 
-const Button = styled.button`
-  border: 0;
-  border-radius: 10px;
-  font: inherit;
-  color: white;
-  font-weight: 600;
-  transition: filter 0.2s;
-  &:hover {
-    filter: brightness(0.93);
-  }
-`
-
-export const CtaButton = styled(Button)`
-  background: ${(props) => props.theme.primary};
-  padding: 1rem 2.25rem;
-`
-
 export const Description = styled.p`
   width: 70%;
   max-width: 900px;
