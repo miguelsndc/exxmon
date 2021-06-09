@@ -73,6 +73,10 @@ export const ResultsNotFound = styled.div`
   align-items: center;
   flex-direction: column;
   margin: 2rem 0;
+
+  button {
+    margin-top: 1.2rem;
+  }
 `
 export const AdditionalInfo = styled.div`
   display: flex;
