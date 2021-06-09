@@ -25,16 +25,16 @@ interface PopularMoviesProps {
   mostPopularMovies: PopularMovie[]
 }
 
-const ObserverOptions = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 0.3,
-}
-
 export default function PopularMovies({
   mostPopularMovies,
 }: PopularMoviesProps) {
   const [page, setPage] = useState(2)
+
+  const ObserverOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.4,
+  }
 
   const { elementRef, isVisible } = useElementOnScreen(ObserverOptions)
 
