@@ -83,7 +83,7 @@ export default function SpecificMovieDetails({
         </HorizontalScrollSection>
       ) : (
         <ResultsNotFound>
-          Could not find any recommended movies of: "{movieDetails.title}"
+          Could not find any recommended movies for: "{movieDetails.title}"
           <Link href="/movies/popular">
             <CtaButton>Go back to Popular</CtaButton>
           </Link>
