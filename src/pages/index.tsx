@@ -48,6 +48,7 @@ export default function Feed({
   genres,
 }: FeedProps) {
   const [movies, setMovies] = useState<MovieRelativeToGenre[]>([])
+  const [canFetch, setCanFetch] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [genreIndex, setGenreIndex] = useState(0)
 
@@ -78,17 +79,18 @@ export default function Feed({
   }, [])
 
   useEffect(() => {
-    if (isVisible && genreIndex < genres.length) {
+    if (isVisible && genreIndex < genres.length && canFetch) {
       setIsLoading(true)
+      setCanFetch(false)
       getMovieByGenre(genres[genreIndex])
         .then((res) => {
+          setGenreIndex((prevIndex) => prevIndex + 1)
+
           movies
             ? setMovies((prevMovies) => {
                 return [...prevMovies, res]
               })
             : setMovies([res])
-
-          setGenreIndex((prevIndex) => prevIndex + 1)
         })
         .finally(() => {
           setIsLoading(false)
@@ -100,6 +102,10 @@ export default function Feed({
               movies,
             })
           )
+
+          setTimeout(() => {
+            setCanFetch(true)
+          }, 70)
         })
     }
   }, [isVisible])
