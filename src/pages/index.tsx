@@ -68,6 +68,35 @@ export default function Feed({
     return { name: genre.name, data: movieRes.data.results }
   }
 
+  async function getNextMovies() {
+    setIsLoading(true)
+    setCanFetch(false)
+
+    const res = await getMovieByGenre(genres[genreIndex])
+
+    setGenreIndex((prevIndex) => prevIndex + 1)
+
+    movies
+      ? setMovies((prevMovies) => {
+          return [...prevMovies, res]
+        })
+      : setMovies([res])
+
+    setIsLoading(false)
+
+    sessionStorage.setItem(
+      '@Exxmon/homePersistedState',
+      JSON.stringify({
+        genreIndex,
+        movies,
+      })
+    )
+
+    setTimeout(() => {
+      setCanFetch(true)
+    }, 70)
+  }
+
   useEffect(() => {
     const data = sessionStorage.getItem('@Exxmon/homePersistedState')
     const persisted = JSON.parse(data)
@@ -80,33 +109,7 @@ export default function Feed({
 
   useEffect(() => {
     if (isVisible && genreIndex < genres.length && canFetch) {
-      setIsLoading(true)
-      setCanFetch(false)
-      getMovieByGenre(genres[genreIndex])
-        .then((res) => {
-          setGenreIndex((prevIndex) => prevIndex + 1)
-
-          movies
-            ? setMovies((prevMovies) => {
-                return [...prevMovies, res]
-              })
-            : setMovies([res])
-        })
-        .finally(() => {
-          setIsLoading(false)
-
-          sessionStorage.setItem(
-            '@Exxmon/homePersistedState',
-            JSON.stringify({
-              genreIndex,
-              movies,
-            })
-          )
-
-          setTimeout(() => {
-            setCanFetch(true)
-          }, 70)
-        })
+      getNextMovies()
     }
   }, [isVisible])
 
