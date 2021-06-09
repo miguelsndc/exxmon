@@ -15,10 +15,19 @@ export function filterReducer(state: State, action: Action) {
       }
 
     case Actions.selectSortOption:
-      console.log(action.sortOption)
       return {
         ...state,
         sortOption: action.sortOption,
+      }
+
+    case Actions.submitFilters:
+      const selectedOptions = Object.fromEntries(
+        Object.entries(action.filters).filter(([_, value]) => value == true)
+      )
+
+      return {
+        ...state,
+        selectedOptions,
       }
 
     default:
