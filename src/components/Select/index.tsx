@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { SelectControl, Option, Options, SelectedValue } from './styles'
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { Action, Actions } from '../../pages/movies/discover'
