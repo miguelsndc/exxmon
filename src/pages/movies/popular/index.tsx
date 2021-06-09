@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react'
 import { MovieCard } from '../../../components/MovieCard'
 import { Loading } from '../../../components/Loading'
 
+import { MostPopularSection } from '../../../styles/pages/Popular'
+import { GridContainer } from '../../../styles/shared'
+
+import { useElementOnScreen } from '../../../hooks/useElementOnScreen'
+import { usePagination } from '../../../hooks/usePagination'
+
 import { MovieResponse } from '../../../types/Movie'
 
-import {
-  GridContainer,
-  MostPopularSection,
-} from '../../../styles/pages/Popular'
 import { api } from '../../../services/api'
-import { usePagination } from '../../../hooks/usePagination'
-import { useElementOnScreen } from '../../../hooks/useElementOnScreen'
 
 interface PopularMovie {
   id: number
@@ -25,16 +25,18 @@ interface PopularMoviesProps {
   mostPopularMovies: PopularMovie[]
 }
 
+const ObserverOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.3,
+}
+
 export default function PopularMovies({
   mostPopularMovies,
 }: PopularMoviesProps) {
   const [page, setPage] = useState(2)
 
-  const { elementRef, isVisible } = useElementOnScreen({
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.3,
-  })
+  const { elementRef, isVisible } = useElementOnScreen(ObserverOptions)
 
   const { currentContent, next, isLoading, hasMore } = usePagination(
     page,
@@ -54,7 +56,9 @@ export default function PopularMovies({
       <h1>Most Popular</h1>
       <GridContainer>
         {currentContent?.map((movie, index) => {
-          if (index === currentContent.length - 1) {
+          const isLast = index === currentContent.length - 1
+
+          if (isLast) {
             return (
               <div ref={elementRef} key={movie.id}>
                 <MovieCard

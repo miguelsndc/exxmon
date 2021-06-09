@@ -1,37 +1,27 @@
 import { GetStaticProps } from 'next'
 import { useEffect, useState } from 'react'
+
+import { HorizontalScrollSection } from '../components/HorizontalScroll'
+import { FeaturedMovie } from '../components/FeaturedMovie'
+import { Loading } from '../components/Loading'
 import { Card } from '../components/Card'
 
-import { FeaturedMovie } from '../components/FeaturedMovie'
-import { HorizontalScrollSection } from '../components/HorizontalScroll'
-import { Loading } from '../components/Loading'
 import { useElementOnScreen } from '../hooks/useElementOnScreen'
+
+import { Footer } from '../styles/pages/Home'
+import { CtaButton } from '../styles/shared'
 
 import { api } from '../services/api'
 
 import {
-  Genre,
   GenreResponse,
-  Movie,
   MovieDetails,
   MovieResponse,
+  Featured,
+  PopularMovie,
+  MovieRelativeToGenre,
+  Genre,
 } from '../types/Movie'
-
-type Featured = {
-  id: number
-  backdropPath: string
-  title: string
-  genres: Genre[]
-  overview: string
-  tagline: string
-}
-
-type PopularMovie = {
-  id: number
-  posterPath: string
-  title: string
-  rating: number
-}
 
 type FeedProps = {
   featuredMovie: Featured
@@ -40,9 +30,15 @@ type FeedProps = {
   genres: Genre[]
 }
 
-type MovieRelativeToGenre = {
-  name: string
-  data: Movie[]
+const ObserverOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1,
+}
+
+const scrollOptions: ScrollToOptions = {
+  top: 0,
+  behavior: 'smooth',
 }
 
 export default function Feed({
@@ -51,17 +47,17 @@ export default function Feed({
   topRatedMovies,
   genres,
 }: FeedProps) {
-  const [movies, setMovies] = useState<MovieRelativeToGenre[]>(null)
+  const [movies, setMovies] = useState<MovieRelativeToGenre[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [genreIndex, setGenreIndex] = useState(0)
 
-  const { elementRef, isVisible } = useElementOnScreen({
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.3,
-  })
+  const { elementRef, isVisible } = useElementOnScreen(ObserverOptions)
 
-  async function getMovieByGenre(genre: { name: string; id: number }) {
+  function scrollTop() {
+    window.scrollTo(scrollOptions)
+  }
+
+  async function getMovieByGenre(genre: Genre) {
     const movieRes = await api.get<MovieResponse>('/discover/movie', {
       params: {
         with_genres: genre.id,
@@ -86,13 +82,12 @@ export default function Feed({
       setIsLoading(true)
       getMovieByGenre(genres[genreIndex])
         .then((res) => {
-          if (movies) {
-            setMovies((prevMovies) => {
-              return [...prevMovies, res]
-            })
-          } else {
-            setMovies([res])
-          }
+          movies
+            ? setMovies((prevMovies) => {
+                return [...prevMovies, res]
+              })
+            : setMovies([res])
+
           setGenreIndex((prevIndex) => prevIndex + 1)
         })
         .finally(() => {
@@ -148,39 +143,33 @@ export default function Feed({
         })}
       </HorizontalScrollSection>
 
-      {movies &&
-        movies.map((movie) => {
-          return (
-            <HorizontalScrollSection
-              title={movie.name}
-              path="/movies/popular"
-              key={movie.name}
-            >
-              {movie.data.map((movie) => {
-                return (
-                  <Card
-                    key={movie.id}
-                    backdropPath={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-                    path={`/movies/${movie.id}`}
-                    name={movie.title}
-                    popularity={movie.vote_average}
-                  />
-                )
-              })}
-            </HorizontalScrollSection>
-          )
-        })}
-      <div ref={elementRef}>DDDDD</div>
-      {isLoading && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <Loading />
+      {movies.map((movie) => {
+        return (
+          <HorizontalScrollSection
+            title={movie.name}
+            path="/movies/popular"
+            key={movie.name}
+          >
+            {movie.data.map((movie) => {
+              return (
+                <Card
+                  key={movie.id}
+                  backdropPath={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
+                  path={`/movies/${movie.id}`}
+                  name={movie.title}
+                  popularity={movie.vote_average}
+                />
+              )
+            })}
+          </HorizontalScrollSection>
+        )
+      })}
+      <Footer>
+        {isLoading && <Loading />}
+        <div ref={elementRef}>
+          <CtaButton onClick={scrollTop}>Go back to top</CtaButton>
         </div>
-      )}
+      </Footer>
     </section>
   )
 }
