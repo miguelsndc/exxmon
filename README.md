@@ -73,7 +73,7 @@
     <img alt="GIF Working Project" src="https://res.cloudinary.com/db9t2jrhe/image/upload/v1623271082/movie-example_bdg0r8.png">
  </p>
 
-This is a project that allows you to search and get in touch with the most popular movies ou there, it was really fun and challenging to build, i've learne tons of concepts,
+This is a project that allows you to search and get in touch with the most popular movies out there, it was really fun and challenging to build, i've learned tons of concepts,
 hope you like it
 
 Here's what i learned:
