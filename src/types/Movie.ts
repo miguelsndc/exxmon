@@ -1,11 +1,11 @@
-export interface MovieResponse {
+export type MovieResponse = {
   page: number
   results: Movie[]
   total_pages: number
   total_results: number
 }
 
-export interface Movie {
+export type Movie = {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
@@ -22,7 +22,7 @@ export interface Movie {
   vote_count: number
 }
 
-export interface MovieDetails {
+export type MovieDetails = {
   adult: boolean
   backdrop_path: string
   belongs_to_collection: any
@@ -50,29 +50,50 @@ export interface MovieDetails {
   vote_count: number
 }
 
-export interface GenreResponse {
+export type GenreResponse = {
   genres: Genre[]
 }
 
-export interface Genre {
+export type Genre = {
   id: number
   name: string
 }
 
-export interface ProductionCompany {
+export type ProductionCompany = {
   id: number
   logo_path: any
   name: string
   origin_country: string
 }
 
-export interface ProductionCountry {
+export type ProductionCountry = {
   iso_3166_1: string
   name: string
 }
 
-export interface SpokenLanguage {
+export type SpokenLanguage = {
   english_name: string
   iso_639_1: string
   name: string
+}
+
+export type Featured = {
+  id: number
+  backdropPath: string
+  title: string
+  genres: Genre[]
+  overview: string
+  tagline: string
+}
+
+export type PopularMovie = {
+  id: number
+  posterPath: string
+  title: string
+  rating: number
+}
+
+export type MovieRelativeToGenre = {
+  name: string
+  data: Movie[]
 }
