@@ -1,11 +1,11 @@
-export interface ArtistResponse {
+export type ArtistResponse = {
   page: number
   results: Artist[]
   total_pages: number
   total_results: number
 }
 
-export interface Artist {
+export type Artist = {
   adult: boolean
   gender: number
   id: number
@@ -16,7 +16,7 @@ export interface Artist {
   profile_path?: string
 }
 
-export interface KnownFor {
+export type KnownFor = {
   adult?: boolean
   backdrop_path: string
   genre_ids: number[]
