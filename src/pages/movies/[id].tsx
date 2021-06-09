@@ -21,6 +21,7 @@ type SimilarMovie = {
   title: string
   rating: number
 }
+
 type MovieDetailsProps = {
   releaseDate: string
   backdropPath: string
