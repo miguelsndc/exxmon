@@ -5,11 +5,12 @@ import {
   Poster,
   MovieDetails,
   Overlay,
-  CtaButton,
   Genres,
   Description,
   PosterFallback,
 } from './styles'
+
+import { CtaButton } from '../../styles/shared'
 
 import { Genre } from '../../types/Movie'
 
