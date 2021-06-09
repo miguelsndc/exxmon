@@ -19,6 +19,7 @@ import { useRouter } from 'next/router'
 export function Menu() {
   const [hasScrolled, setHasScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   const router = useRouter()
 
   function scroll() {
@@ -66,9 +67,7 @@ export function Menu() {
           <Link href="/movies/popular">
             <MenuItem>Popular</MenuItem>
           </Link>
-          <Link href="/movies/discover">
-            <MenuItem>Discovery</MenuItem>
-          </Link>
+
           <Link href="/movies/search">
             <MenuItem>Search</MenuItem>
           </Link>
@@ -88,10 +87,6 @@ export function Menu() {
 
             <MenuItem onClick={() => redirect('/movies/popular')}>
               Popular
-            </MenuItem>
-
-            <MenuItem onClick={() => redirect('/movies/discover')}>
-              Discovery
             </MenuItem>
 
             <MenuItem onClick={() => redirect('/movies/search')}>
