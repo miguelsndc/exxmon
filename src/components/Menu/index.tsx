@@ -5,6 +5,7 @@ import {
   NavigationLinks,
   MobileMenu,
   CloseMenu,
+  DesktopMenu,
 } from './styles'
 
 import Link from 'next/link'
@@ -57,6 +58,22 @@ export function Menu() {
         <MobileMenu onClick={toggleMenu}>
           <RiMenu3Fill size={'2rem'} color={DarkTheme.primary} />
         </MobileMenu>
+
+        <DesktopMenu>
+          <Link href="/">
+            <MenuItem>Home</MenuItem>
+          </Link>
+          <Link href="/movies/popular">
+            <MenuItem>Popular</MenuItem>
+          </Link>
+          <Link href="/movies/discover">
+            <MenuItem>Discovery</MenuItem>
+          </Link>
+          <Link href="/movies/search">
+            <MenuItem>Search</MenuItem>
+          </Link>
+        </DesktopMenu>
+
         {isMobileMenuOpen && (
           <NavigationLinks>
             <CloseMenu>

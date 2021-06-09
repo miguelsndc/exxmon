@@ -77,43 +77,38 @@ export const MenuItem = styled.span`
     color: ${(props) => props.theme.white};
   }
 
-  &:not(:last-child) {
-    margin-right: 3rem;
-  }
-
   @media (max-width: 768px) {
-    &:not(:last-child) {
-      margin-right: 0;
-    }
-
     font-size: 1.25rem;
     font-weight: 500;
   }
 `
 
 export const NavigationLinks = styled.div`
-  width: 60%;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  text-align: center;
+  background: ${(props) => props.theme.background};
+
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  flex-direction: column;
+`
 
-  animation: ${Fade} 0.2s;
+export const DesktopMenu = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 
   @media (max-width: 768px) {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100vw;
-    height: 100vh;
-
-    text-align: center;
-    background: ${(props) => props.theme.background};
-
-    justify-content: space-evenly;
-
-    flex-direction: column;
+    display: none;
   }
 `
 
