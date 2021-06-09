@@ -1,6 +1,3 @@
-import format from 'date-fns/format'
-import enUS from 'date-fns/locale/en-US'
-
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 
@@ -13,7 +10,7 @@ import { Genre, MovieDetails, MovieResponse } from '../../types/Movie'
 
 import { api } from '../../services/api'
 
-import { CtaButton } from '../../styles/pages/Popular'
+import { CtaButton } from '../../styles/shared'
 import { MoviePoster, ResultsNotFound } from '../../styles/pages/Id'
 
 import Link from 'next/link'
@@ -38,11 +35,13 @@ type MovieDetailsProps = {
 type Params = {
   movieDetails: MovieDetailsProps
   similarMovies: SimilarMovie[]
+  recommendedMovies: SimilarMovie[]
 }
 
 export default function SpecificMovieDetails({
   movieDetails,
   similarMovies,
+  recommendedMovies,
 }: Params) {
   const router = useRouter()
 
@@ -63,6 +62,32 @@ export default function SpecificMovieDetails({
           rating={movieDetails.rating}
         />
       </MoviePoster>
+
+      {recommendedMovies.length ? (
+        <HorizontalScrollSection
+          title="Recommended Movies"
+          path="/movies/popular"
+        >
+          {recommendedMovies?.map((movie) => {
+            return (
+              <Card
+                key={movie.id}
+                path={`/movies/${movie.id}`}
+                name={movie.title}
+                popularity={movie.rating}
+                backdropPath={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+              />
+            )
+          })}
+        </HorizontalScrollSection>
+      ) : (
+        <ResultsNotFound>
+          Could not find any recommended movies of: "{movieDetails.title}"
+          <Link href="/movies/popular">
+            <CtaButton>Go back to Popular</CtaButton>
+          </Link>
+        </ResultsNotFound>
+      )}
 
       {similarMovies.length ? (
         <HorizontalScrollSection title="Similar Movies" path="/movies/popular">
@@ -111,6 +136,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params
 
   const movieDetailsResponse = await api.get<MovieDetails>(`/movie/${id}`)
+  const similarMoviesResponse = await api.get<MovieResponse>(
+    `/movie/${id}/similar`
+  )
+  const recommendedMoviesResponse = await api.get<MovieResponse>(
+    `/movie/${id}/recommendations`
+  )
 
   const movieDetails = {
     releaseDate: movieDetailsResponse.data.release_date,
@@ -125,20 +156,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     status: movieDetailsResponse.data.status,
   }
 
-  const similarMoviesResponse = await api.get<MovieResponse>(
-    `/movie/${id}/similar`
-  )
-
   const similarMovies = similarMoviesResponse.data.results.map((movie) => {
     return {
       id: movie.id,
-      posterPath: movie.poster_path,
+      posterPath: movie.backdrop_path || movie.poster_path,
       title: movie.title || movie.original_title,
       rating: movie.vote_average,
     }
   })
 
+  const recommendedMovies = recommendedMoviesResponse.data.results.map(
+    (movie) => {
+      return {
+        id: movie.id,
+        posterPath: movie.backdrop_path || movie.poster_path,
+        title: movie.title || movie.original_title,
+        rating: movie.vote_average,
+      }
+    }
+  )
+
   return {
-    props: { movieDetails, similarMovies },
+    props: { movieDetails, similarMovies, recommendedMovies },
   }
 }
