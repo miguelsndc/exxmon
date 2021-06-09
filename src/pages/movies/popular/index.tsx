@@ -83,7 +83,6 @@ export default function PopularMovies({
         })}
       </GridContainer>
       {isLoading && <Loading />}
-      {!hasMore && <h1>No more content available</h1>}
     </MostPopularSection>
   )
 }
