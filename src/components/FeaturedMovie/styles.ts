@@ -34,7 +34,7 @@ export const PosterFallback = styled.div`
   h2 {
     font-size: 2rem;
     text-transform: capitalize;
-    filter: brightness(0.8);
+    filter: brightness(0.5);
   }
 `
 
