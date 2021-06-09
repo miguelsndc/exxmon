@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { GridContainer } from '../../../styles/pages/Popular'
+
+import { MovieCard } from '../../../components/MovieCard'
+
 import {
   Controllers,
   ResultsFeedback,
   ErrorMessage,
   SearchContainer,
+  SearchForm,
 } from '../../../styles/pages/Search'
-import { api } from '../../../services/api'
-import { SearchForm } from '../../../styles/pages/Discover'
+import { GridContainer } from '../../../styles/shared'
+
 import { Movie, MovieResponse } from '../../../types/Movie'
-import { MovieCard } from '../../../components/MovieCard'
 import { useElementOnScreen } from '../../../hooks/useElementOnScreen'
+import { api } from '../../../services/api'
 
 type FormData = {
   query: string
@@ -135,7 +138,9 @@ export default function SearchMovie() {
       {movieResults && (
         <GridContainer>
           {movieResults.map((movie, index) => {
-            if (movieResults.length - 1 === index) {
+            const isLast = movieResults.length - 1 === index
+
+            if (isLast) {
               return (
                 <div ref={elementRef} key={movie.id}>
                   <MovieCard
